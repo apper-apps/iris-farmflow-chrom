@@ -32,15 +32,15 @@ const [formData, setFormData] = useState({
     }
   }, [isOpen]);
 
-  useEffect(() => {
-if (formData.farm_id_c) {
+useEffect(() => {
+    if (formData.farm_id_c) {
       const farmCrops = crops.filter(crop => crop.farm_id_c === parseInt(formData.farm_id_c));
       setFilteredCrops(farmCrops);
       setFormData(prev => ({ ...prev, crop_id_c: "" }));
     } else {
       setFilteredCrops([]);
     }
-  }, [formData.farmId, crops]);
+  }, [formData.farm_id_c, crops]);
 
   const loadData = async () => {
     setIsLoading(true);
@@ -129,18 +129,18 @@ setFormData({
 
             <form onSubmit={handleSubmit} className="p-6 space-y-4">
               <Input
-                label="Task Title"
-                name="title"
-                value={formData.title}
+label="Task Title"
+                name="title_c"
+                value={formData.title_c}
                 onChange={handleChange}
                 placeholder="e.g., Water tomatoes, Apply fertilizer"
                 required
               />
 
-              <Select
+<Select
                 label="Farm"
-                name="farmId"
-                value={formData.farmId}
+                name="farm_id_c"
+                value={formData.farm_id_c}
                 onChange={handleChange}
                 disabled={isLoading}
                 required
@@ -154,11 +154,11 @@ setFormData({
               </Select>
 
               <Select
-                label="Crop (optional)"
-                name="cropId"
-                value={formData.cropId}
+label="Crop (optional)"
+                name="crop_id_c"
+                value={formData.crop_id_c}
                 onChange={handleChange}
-                disabled={!formData.farmId}
+                disabled={!formData.farm_id_c}
               >
                 <option value="">Select a crop (optional)</option>
 {filteredCrops.map(crop => (
@@ -170,17 +170,17 @@ setFormData({
 
               <div className="grid grid-cols-2 gap-4">
                 <Input
-                  label="Due Date"
-                  name="dueDate"
+label="Due Date"
+                  name="due_date_c"
                   type="date"
-                  value={formData.dueDate}
+                  value={formData.due_date_c}
                   onChange={handleChange}
                   required
                 />
                 <Select
-                  label="Priority"
-                  name="priority"
-                  value={formData.priority}
+label="Priority"
+                  name="priority_c"
+                  value={formData.priority_c}
                   onChange={handleChange}
                 >
                   <option value="low">Low</option>
@@ -216,10 +216,10 @@ setFormData({
                 </Select>
               </div>
 
-              <Textarea
+<Textarea
                 label="Description (optional)"
-                name="description"
-                value={formData.description}
+                name="description_c"
+                value={formData.description_c}
                 onChange={handleChange}
                 placeholder="Any additional details about this task..."
                 rows={3}

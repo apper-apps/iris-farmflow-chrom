@@ -19,6 +19,10 @@ import Crops from "@/components/pages/Crops";
 import Tasks from "@/components/pages/Tasks";
 import Button from "@/components/atoms/Button";
 import Card from "@/components/atoms/Card";
+import AddFarmModal from "@/components/organisms/AddFarmModal";
+import AddCropModal from "@/components/organisms/AddCropModal";
+import AddTaskModal from "@/components/organisms/AddTaskModal";
+import AddEquipmentModal from "@/components/organisms/AddEquipmentModal";
 
 const Dashboard = () => {
   const { checkTaskNotifications } = useNotification();
@@ -32,6 +36,12 @@ const Dashboard = () => {
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  
+  // Modal states
+  const [showAddFarmModal, setShowAddFarmModal] = useState(false);
+  const [showAddCropModal, setShowAddCropModal] = useState(false);
+  const [showAddTaskModal, setShowAddTaskModal] = useState(false);
+  const [showAddEquipmentModal, setShowAddEquipmentModal] = useState(false);
 
   useEffect(() => {
     loadDashboardData();
@@ -281,24 +291,81 @@ const recentCrops = data.crops
       <Card>
         <h3 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <Button variant="outline" className="h-20 flex-col">
+          <Button 
+            variant="outline" 
+            className="h-20 flex-col"
+            onClick={() => setShowAddFarmModal(true)}
+          >
             <ApperIcon name="Plus" size={20} className="mb-2" />
             <span className="text-sm">Add Farm</span>
           </Button>
-          <Button variant="outline" className="h-20 flex-col">
+          <Button 
+            variant="outline" 
+            className="h-20 flex-col"
+            onClick={() => setShowAddCropModal(true)}
+          >
             <ApperIcon name="Sprout" size={20} className="mb-2" />
             <span className="text-sm">Plant Crop</span>
           </Button>
-          <Button variant="outline" className="h-20 flex-col">
+          <Button 
+            variant="outline" 
+            className="h-20 flex-col"
+            onClick={() => setShowAddTaskModal(true)}
+          >
             <ApperIcon name="CheckSquare" size={20} className="mb-2" />
             <span className="text-sm">Add Task</span>
           </Button>
-          <Button variant="outline" className="h-20 flex-col">
+          <Button 
+            variant="outline" 
+            className="h-20 flex-col"
+            onClick={() => setShowAddEquipmentModal(true)}
+          >
             <ApperIcon name="Truck" size={20} className="mb-2" />
             <span className="text-sm">Add Equipment</span>
           </Button>
         </div>
       </Card>
+
+      {/* Modals */}
+      <AddFarmModal
+        isOpen={showAddFarmModal}
+        onClose={() => setShowAddFarmModal(false)}
+        onSuccess={() => {
+          setShowAddFarmModal(false);
+          loadDashboardData();
+        }}
+      />
+      
+      <AddCropModal
+        isOpen={showAddCropModal}
+        onClose={() => setShowAddCropModal(false)}
+        farms={data.farms}
+        onSuccess={() => {
+          setShowAddCropModal(false);
+          loadDashboardData();
+        }}
+      />
+      
+      <AddTaskModal
+        isOpen={showAddTaskModal}
+        onClose={() => setShowAddTaskModal(false)}
+        farms={data.farms}
+        crops={data.crops}
+        onSuccess={() => {
+          setShowAddTaskModal(false);
+          loadDashboardData();
+        }}
+      />
+      
+      <AddEquipmentModal
+        isOpen={showAddEquipmentModal}
+        onClose={() => setShowAddEquipmentModal(false)}
+        farms={data.farms}
+        onSuccess={() => {
+          setShowAddEquipmentModal(false);
+          loadDashboardData();
+        }}
+      />
     </div>
   );
 };

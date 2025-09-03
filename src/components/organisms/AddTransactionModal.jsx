@@ -50,7 +50,7 @@ if (formData.farm_id_c) {
     } else {
       setFilteredCrops([]);
     }
-  }, [formData.farmId, crops]);
+  }, [formData.farm_id_c, crops]);
 
   const loadData = async () => {
     setIsLoading(true);
@@ -123,7 +123,7 @@ setFormData({
     }));
   };
 
-  const currentCategories = formData.type === "income" ? incomeCategories : expenseCategories;
+const currentCategories = formData.type_c === "income" ? incomeCategories : expenseCategories;
 
   return (
     <AnimatePresence>
@@ -151,8 +151,8 @@ setFormData({
               <div className="flex gap-2">
                 <Button
                   type="button"
-                  variant={formData.type === 'expense' ? 'primary' : 'outline'}
-                  onClick={() => setFormData(prev => ({ ...prev, type: 'expense', category: '' }))}
+variant={formData.type_c === 'expense' ? 'primary' : 'outline'}
+                  onClick={() => setFormData(prev => ({ ...prev, type_c: 'expense', category_c: '' }))}
                   className="flex-1"
                   size="sm"
                 >
@@ -160,8 +160,8 @@ setFormData({
                 </Button>
                 <Button
                   type="button"
-                  variant={formData.type === 'income' ? 'primary' : 'outline'}
-                  onClick={() => setFormData(prev => ({ ...prev, type: 'income', category: '' }))}
+variant={formData.type_c === 'income' ? 'primary' : 'outline'}
+                  onClick={() => setFormData(prev => ({ ...prev, type_c: 'income', category_c: '' }))}
                   className="flex-1"
                   size="sm"
                 >
@@ -180,9 +180,9 @@ setFormData({
                 />
               </div>
               <Select
-                label="Farm"
-                name="farmId"
-                value={formData.farmId}
+label="Farm"
+                name="farm_id_c"
+                value={formData.farm_id_c}
                 onChange={handleChange}
                 disabled={isLoading}
                 required
@@ -197,10 +197,10 @@ setFormData({
 
               <Select
                 label="Crop (optional)"
-                name="cropId"
-                value={formData.cropId}
+name="crop_id_c"
+                value={formData.crop_id_c}
                 onChange={handleChange}
-                disabled={!formData.farmId}
+                disabled={!formData.farm_id_c}
               >
 <option value="">Select a crop (optional)</option>
                 {filteredCrops.map(crop => (
@@ -212,9 +212,9 @@ setFormData({
 
               <div className="grid grid-cols-2 gap-4">
                 <Select
-                  label="Category"
-                  name="category"
-                  value={formData.category}
+label="Category"
+                  name="category_c"
+                  value={formData.category_c}
                   onChange={handleChange}
                   required
                 >
@@ -226,10 +226,10 @@ setFormData({
                   ))}
                 </Select>
                 <Input
-                  label="Amount ($)"
-                  name="amount"
+label="Amount ($)"
+                  name="amount_c"
                   type="number"
-                  value={formData.amount}
+                  value={formData.amount_c}
                   onChange={handleChange}
                   placeholder="0.00"
                   min="0"
@@ -239,18 +239,18 @@ setFormData({
               </div>
 
               <Input
-                label="Date"
-                name="date"
+label="Date"
+                name="date_c"
                 type="date"
-                value={formData.date}
+                value={formData.date_c}
                 onChange={handleChange}
                 required
               />
 
               <Textarea
-                label="Description (optional)"
-                name="description"
-                value={formData.description}
+label="Description (optional)"
+                name="description_c"
+                value={formData.description_c}
                 onChange={handleChange}
                 placeholder="Any additional details about this transaction..."
                 rows={3}

@@ -1,34 +1,45 @@
 import React from "react";
+import { useNotification } from "@/services/NotificationProvider";
 import ApperIcon from "@/components/ApperIcon";
 import Button from "@/components/atoms/Button";
 
-const Header = ({ onMenuClick, title }) => {
+const Header = ({ onMenuClick, onNotificationClick }) => {
+  const { settings, isSupported } = useNotification();
+
   return (
-    <header className="bg-white border-b border-gray-200 px-4 py-4 lg:px-6">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-4">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={onMenuClick}
-            className="lg:hidden"
-          >
-            <ApperIcon name="Menu" size={20} />
-          </Button>
-          <div>
-            <h2 className="text-xl font-semibold text-gray-900">{title}</h2>
+    <header className="bg-white shadow-sm border-b border-gray-200">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="flex h-16 justify-between items-center">
+          <div className="flex items-center">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={onMenuClick}
+              className="lg:hidden"
+            >
+              <ApperIcon name="Menu" size={20} />
+            </Button>
+            <h1 className="ml-2 text-xl font-bold text-gray-900 lg:ml-0">
+              FarmFlow
+            </h1>
           </div>
-        </div>
-        
-        <div className="flex items-center gap-4">
-          <div className="flex items-center gap-2 text-sm text-gray-600">
-            <ApperIcon name="Calendar" size={16} />
-            <span>{new Date().toLocaleDateString("en-US", { 
-              weekday: "long", 
-              year: "numeric", 
-              month: "long", 
-              day: "numeric" 
-            })}</span>
+          
+          <div className="flex items-center gap-4">
+            <Button variant="ghost" size="sm">
+              <ApperIcon name="Search" size={18} />
+            </Button>
+            
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              onClick={onNotificationClick}
+              className="relative"
+            >
+              <ApperIcon name="Bell" size={18} />
+              {isSupported && settings.enabled && settings.permission === 'granted' && (
+                <span className="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full"></span>
+              )}
+            </Button>
           </div>
         </div>
       </div>

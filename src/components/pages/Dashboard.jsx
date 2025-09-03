@@ -16,7 +16,7 @@ import { cropService } from "@/services/api/cropService";
 import { taskService } from "@/services/api/taskService";
 import { transactionService } from "@/services/api/transactionService";
 import { weatherService } from "@/services/api/weatherService";
-
+import { useNotification } from "@/services/NotificationProvider";
 const Dashboard = () => {
   const [data, setData] = useState({
     farms: [],
@@ -45,7 +45,12 @@ const Dashboard = () => {
         weatherService.getCurrentWeather()
       ]);
 
-      setData({ farms, crops, tasks, transactions, weather });
+setData({ farms, crops, tasks, transactions, weather });
+      
+      // Check for task notifications after loading data
+      const { checkTaskNotifications } = useNotification();
+      checkTaskNotifications(tasks);
+      
     } catch (err) {
       setError("Failed to load dashboard data");
     } finally {

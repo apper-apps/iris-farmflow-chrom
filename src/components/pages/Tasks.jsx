@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { isToday, isTomorrow, isThisWeek, isPast } from "date-fns";
 import TaskCard from "@/components/molecules/TaskCard";
+import { useNotification } from "@/services/NotificationProvider";
 import AddTaskModal from "@/components/organisms/AddTaskModal";
 import Button from "@/components/atoms/Button";
 import Input from "@/components/atoms/Input";
@@ -74,6 +75,11 @@ const Tasks = () => {
       return matchesSearch && matchesPriority && matchesStatus;
     });
 
+const { checkTaskNotifications } = useNotification();
+    
+    // Check for tasks that need notifications
+    checkTaskNotifications(filteredTasks);
+    
     return {
       overdue: filteredTasks.filter(task => !task.completed && isPast(new Date(task.dueDate)) && !isToday(new Date(task.dueDate))),
       today: filteredTasks.filter(task => !task.completed && isToday(new Date(task.dueDate))),

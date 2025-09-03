@@ -72,7 +72,23 @@ class TaskService {
       throw new Error("Task not found");
     }
     this.tasks[index].completed = completed;
-    return { ...this.tasks[index] };
+return { ...this.tasks[index] };
+  }
+
+  async getTasksDueSoon(daysAhead = 1) {
+    await delay();
+    const targetDate = new Date();
+    targetDate.setDate(targetDate.getDate() + daysAhead);
+    targetDate.setHours(23, 59, 59, 999); // End of target day
+    
+    const now = new Date();
+    
+    return this.tasks.filter(task => {
+      if (task.completed) return false;
+      
+      const dueDate = new Date(task.dueDate);
+      return dueDate >= now && dueDate <= targetDate;
+    }).map(task => ({ ...task }));
   }
 }
 

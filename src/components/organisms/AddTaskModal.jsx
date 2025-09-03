@@ -189,7 +189,7 @@ label="Priority"
                 </Select>
 </div>
 
-              <div className="grid grid-cols-2 gap-4">
+<div className="grid grid-cols-2 gap-4">
                 <Select
                   label="Status"
                   name="status_c"
@@ -202,8 +202,9 @@ label="Priority"
                   <option value="completed">Completed</option>
                   <option value="on hold">On Hold</option>
                 </Select>
+              </div>
 
-<Textarea
+              <Textarea
                 label="Description (optional)"
                 name="description_c"
                 value={formData.description_c}

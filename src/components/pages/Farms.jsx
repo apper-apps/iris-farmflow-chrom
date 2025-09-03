@@ -1,16 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import FarmCard from "@/components/molecules/FarmCard";
-import AddFarmModal from "@/components/organisms/AddFarmModal";
-import Button from "@/components/atoms/Button";
-import Input from "@/components/atoms/Input";
-import Loading from "@/components/ui/Loading";
-import Error from "@/components/ui/Error";
-import Empty from "@/components/ui/Empty";
-import ApperIcon from "@/components/ApperIcon";
+import toast from "react-hot-toast";
 import { farmService } from "@/services/api/farmService";
 import { cropService } from "@/services/api/cropService";
 import { taskService } from "@/services/api/taskService";
+import ApperIcon from "@/components/ApperIcon";
+import AddFarmModal from "@/components/organisms/AddFarmModal";
+import FarmCard from "@/components/molecules/FarmCard";
+import Error from "@/components/ui/Error";
+import Empty from "@/components/ui/Empty";
+import Loading from "@/components/ui/Loading";
+import Crops from "@/components/pages/Crops";
+import Input from "@/components/atoms/Input";
+import Button from "@/components/atoms/Button";
 
 const Farms = () => {
   const [farms, setFarms] = useState([]);
@@ -18,9 +20,10 @@ const Farms = () => {
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [searchTerm, setSearchTerm] = useState("");
+const [searchTerm, setSearchTerm] = useState("");
   const [showAddModal, setShowAddModal] = useState(false);
-
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [selectedFarm, setSelectedFarm] = useState(null);
   useEffect(() => {
     loadData();
   }, []);
@@ -50,9 +53,32 @@ const Farms = () => {
     setFarms(prev => [...prev, newFarm]);
   };
 
-  const handleFarmClick = (farm) => {
+const handleFarmClick = (farm) => {
     // In a real app, this would navigate to a detailed farm view
     console.log("Farm clicked:", farm);
+  };
+
+  const handleEditFarm = (farm) => {
+    setSelectedFarm(farm);
+    setShowEditModal(true);
+  };
+
+  const handleDeleteFarm = async (farm) => {
+    if (window.confirm(`Are you sure you want to delete "${farm.Name}"? This action cannot be undone.`)) {
+      try {
+        await farmService.delete(farm.Id);
+        setFarms(prev => prev.filter(f => f.Id !== farm.Id));
+        toast.success("Farm deleted successfully!");
+      } catch (error) {
+        toast.error("Failed to delete farm");
+      }
+    }
+  };
+
+  const handleFarmUpdated = (updatedFarm) => {
+    setFarms(prev => prev.map(f => f.Id === updatedFarm.Id ? updatedFarm : f));
+    setShowEditModal(false);
+    setSelectedFarm(null);
   };
 
   const filteredFarms = farms.filter(farm =>
@@ -138,7 +164,9 @@ const farmCrops = crops.filter(crop => crop.farm_id_c === farmId);
                   farm={farm}
                   cropCount={stats.cropCount}
                   activeTaskCount={stats.activeTaskCount}
-                  onClick={handleFarmClick}
+onClick={handleFarmClick}
+                  onEdit={handleEditFarm}
+                  onDelete={handleDeleteFarm}
                 />
               </motion.div>
             );
@@ -192,10 +220,21 @@ const farmCrops = crops.filter(crop => crop.farm_id_c === farmId);
       )}
 
       {/* Add Farm Modal */}
-      <AddFarmModal
+<AddFarmModal
         isOpen={showAddModal}
         onClose={() => setShowAddModal(false)}
         onFarmAdded={handleFarmAdded}
+      />
+      
+      <AddFarmModal
+        isOpen={showEditModal}
+        onClose={() => {
+          setShowEditModal(false);
+          setSelectedFarm(null);
+        }}
+        onFarmAdded={handleFarmUpdated}
+        farm={selectedFarm}
+        editMode={true}
       />
     </div>
   );

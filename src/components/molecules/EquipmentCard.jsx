@@ -6,7 +6,7 @@ import Button from "@/components/atoms/Button";
 import ApperIcon from "@/components/ApperIcon";
 import { format } from "date-fns";
 
-const EquipmentCard = ({ equipment, onClick }) => {
+const EquipmentCard = ({ equipment, onClick, onEdit, onDelete }) => {
   const formatCurrency = (amount) => {
     if (!amount) return '$0.00';
     return new Intl.NumberFormat('en-US', {
@@ -95,14 +95,14 @@ const EquipmentCard = ({ equipment, onClick }) => {
         </div>
 
         {/* Actions */}
-        <div className="flex gap-2 pt-4 border-t border-gray-100">
+<div className="flex gap-2 pt-4 border-t border-gray-100">
           <Button
             variant="outline"
             size="sm"
             className="flex-1"
             onClick={(e) => {
               e.stopPropagation();
-              console.log('Edit equipment:', equipment);
+              onEdit?.(equipment);
             }}
           >
             <ApperIcon name="Edit" size={14} className="mr-1" />
@@ -111,13 +111,14 @@ const EquipmentCard = ({ equipment, onClick }) => {
           <Button
             variant="ghost"
             size="sm"
+            className="text-red-600 hover:text-red-700 hover:bg-red-50"
             onClick={(e) => {
               e.stopPropagation();
-              console.log('View equipment details:', equipment);
+              onDelete?.(equipment);
             }}
           >
-            <ApperIcon name="Eye" size={14} className="mr-1" />
-            View
+            <ApperIcon name="Trash2" size={14} className="mr-1" />
+            Delete
           </Button>
         </div>
       </Card>

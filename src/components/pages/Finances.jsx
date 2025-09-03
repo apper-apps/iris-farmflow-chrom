@@ -1,21 +1,23 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { format, startOfMonth, endOfMonth, subMonths } from "date-fns";
-import TransactionRow from "@/components/molecules/TransactionRow";
-import AddTransactionModal from "@/components/organisms/AddTransactionModal";
-import StatCard from "@/components/molecules/StatCard";
-import Button from "@/components/atoms/Button";
-import Input from "@/components/atoms/Input";
-import Select from "@/components/atoms/Select";
-import Card from "@/components/atoms/Card";
-import Badge from "@/components/atoms/Badge";
-import Loading from "@/components/ui/Loading";
-import Error from "@/components/ui/Error";
-import Empty from "@/components/ui/Empty";
-import ApperIcon from "@/components/ApperIcon";
+import { endOfMonth, format, startOfMonth, subMonths } from "date-fns";
+import toast from "react-hot-toast";
 import { transactionService } from "@/services/api/transactionService";
 import { farmService } from "@/services/api/farmService";
 import { cropService } from "@/services/api/cropService";
+import ApperIcon from "@/components/ApperIcon";
+import AddTransactionModal from "@/components/organisms/AddTransactionModal";
+import TransactionRow from "@/components/molecules/TransactionRow";
+import StatCard from "@/components/molecules/StatCard";
+import Error from "@/components/ui/Error";
+import Empty from "@/components/ui/Empty";
+import Loading from "@/components/ui/Loading";
+import Farms from "@/components/pages/Farms";
+import Input from "@/components/atoms/Input";
+import Select from "@/components/atoms/Select";
+import Badge from "@/components/atoms/Badge";
+import Button from "@/components/atoms/Button";
+import Card from "@/components/atoms/Card";
 
 const Finances = () => {
   const [transactions, setTransactions] = useState([]);
@@ -54,8 +56,26 @@ const Finances = () => {
     }
   };
 
-  const handleTransactionAdded = (newTransaction) => {
+const handleTransactionAdded = (newTransaction) => {
     setTransactions(prev => [newTransaction, ...prev]);
+  };
+
+  const handleTransactionEdit = async (transaction) => {
+    // For now, just log - in a full implementation, you'd open an edit modal
+    console.log('Edit transaction:', transaction);
+    // This would trigger AddTransactionModal in edit mode with pre-populated data
+  };
+
+  const handleTransactionDelete = async (transaction) => {
+    if (window.confirm(`Are you sure you want to delete this ${transaction.type_c} transaction? This action cannot be undone.`)) {
+      try {
+        await transactionService.delete(transaction.Id);
+        setTransactions(prev => prev.filter(t => t.Id !== transaction.Id));
+        toast.success("Transaction deleted successfully!");
+      } catch (error) {
+        toast.error("Failed to delete transaction");
+      }
+    }
   };
 
   const openAddModal = (type) => {
@@ -327,9 +347,11 @@ const farm = farms.find(f => f.Id === transaction.farm_id_c);
                     transition={{ delay: index * 0.05 }}
                   >
                     <TransactionRow 
-                      transaction={transaction} 
+transaction={transaction} 
                       farm={farm} 
-                      crop={crop} 
+                      crop={crop}
+                      onEdit={handleTransactionEdit}
+                      onDelete={handleTransactionDelete}
                     />
                   </motion.div>
                 );

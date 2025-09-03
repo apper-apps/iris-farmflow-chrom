@@ -1,10 +1,10 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { format } from "date-fns";
-import Badge from "@/components/atoms/Badge";
 import ApperIcon from "@/components/ApperIcon";
+import Badge from "@/components/atoms/Badge";
 
-const TransactionRow = ({ transaction, crop, farm }) => {
+const TransactionRow = ({ transaction, crop, farm, onEdit, onDelete }) => {
 const isIncome = (transaction.type_c || transaction.type) === "income";
   const amount = parseFloat(transaction.amount_c || transaction.amount);
 
@@ -25,54 +25,72 @@ const isIncome = (transaction.type_c || transaction.type) === "income";
 
   return (
     <motion.div
-      initial={{ opacity: 0, x: -20 }}
-      animate={{ opacity: 1, x: 0 }}
-      className="flex items-center justify-between p-4 bg-white border border-gray-100 rounded-lg hover:shadow-sm transition-shadow"
-    >
-      <div className="flex items-center gap-4">
-        <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
-          isIncome ? "bg-green-100 text-green-600" : "bg-red-100 text-red-600"
-        }`}>
-          <ApperIcon 
-name={isIncome ? "TrendingUp" : getCategoryIcon(transaction.category_c || transaction.category)} 
-            size={18}
-          />
+    initial={{
+        opacity: 0,
+        x: -20
+    }}
+    animate={{
+        opacity: 1,
+        x: 0
+    }}
+    className="flex items-center justify-between p-4 bg-white border border-gray-100 rounded-lg hover:shadow-sm transition-shadow">
+    <div className="flex items-center gap-4">
+        <div
+            className={`w-10 h-10 rounded-full flex items-center justify-center ${isIncome ? "bg-green-100 text-green-600" : "bg-red-100 text-red-600"}`}>
+            <ApperIcon
+                name={isIncome ? "TrendingUp" : getCategoryIcon(transaction.category_c || transaction.category)}
+                size={18} />
         </div>
-<div>
-          <p className="font-medium text-gray-900">{transaction.title_c || transaction.description_c || transaction.description || transaction.category_c || transaction.category}</p>
-          {transaction.title_c && (transaction.description_c || transaction.description) && (
-            <p className="text-sm text-gray-600 mt-1">{transaction.description_c || transaction.description}</p>
-          )}
-          <div className="flex items-center gap-2 text-sm text-gray-500">
-<span>{farm?.Name}</span>
-            {crop && (
-              <>
+        <div>
+            <p className="font-medium text-gray-900">{transaction.title_c || transaction.description_c || transaction.description || transaction.category_c || transaction.category}</p>
+            {transaction.title_c && (transaction.description_c || transaction.description) && <p className="text-sm text-gray-600 mt-1">{transaction.description_c || transaction.description}</p>}
+            <div className="flex items-center gap-2 text-sm text-gray-500">
+                <span>{farm?.Name}</span>
+                {crop && <>
+                    <span>•</span>
+                    <span>{crop.type_c}</span>
+                </>}
                 <span>•</span>
-                <span>{crop.type_c}</span>
-              </>
-            )}
-            <span>•</span>
-<span>
-              {(() => {
-                const date = new Date(transaction.date_c || transaction.date);
-                return date && !isNaN(date.getTime()) ? format(date, "MMM d, yyyy") : "Invalid date";
-              })()}
-            </span>
-          </div>
+                <span>
+                    {(() => {
+                        const date = new Date(transaction.date_c || transaction.date);
+                        return date && !isNaN(date.getTime()) ? format(date, "MMM d, yyyy") : "Invalid date";
+                    })()}
+                </span>
+            </div>
         </div>
-      </div>
-      
-      <div className="text-right">
-        <p className={`text-lg font-semibold ${
-          isIncome ? "text-green-600" : "text-red-600"
-        }`}>
-          {isIncome ? "+" : "-"}${amount.toFixed(2)}
+    </div>
+    <div className="text-right">
+        <p
+            className={`text-lg font-semibold ${isIncome ? "text-green-600" : "text-red-600"}`}>
+            {isIncome ? "+" : "-"}${amount.toFixed(2)}
         </p>
         <Badge variant={isIncome ? "success" : "error"} size="sm">
-{transaction.category_c || transaction.category}
+            {transaction.category_c || transaction.category}
         </Badge>
-      </div>
-    </motion.div>
+    </div>
+    {/* Action buttons */}
+    <div className="flex items-center gap-2 ml-4">
+        <button
+            onClick={e => {
+                e.stopPropagation();
+                onEdit?.(transaction);
+            }}
+            className="p-1.5 text-gray-400 hover:text-primary hover:bg-primary/10 rounded-md transition-colors"
+            title="Edit transaction">
+            <ApperIcon name="Edit" size={14} />
+        </button>
+        <button
+            onClick={e => {
+                e.stopPropagation();
+                onDelete?.(transaction);
+            }}
+            className="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-md transition-colors"
+            title="Delete transaction">
+            <ApperIcon name="Trash2" size={14} />
+        </button>
+    </div>
+</motion.div>
   );
 };
 

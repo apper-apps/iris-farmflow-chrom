@@ -1,42 +1,71 @@
-import React, { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import React, { useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import { AnimatePresence, motion } from "framer-motion";
+import { farmService } from "@/services/api/farmService";
+import ApperIcon from "@/components/ApperIcon";
 import Input from "@/components/atoms/Input";
 import Select from "@/components/atoms/Select";
 import Button from "@/components/atoms/Button";
-import ApperIcon from "@/components/ApperIcon";
-import { farmService } from "@/services/api/farmService";
-import { toast } from "react-toastify";
 
-const AddFarmModal = ({ isOpen, onClose, onFarmAdded }) => {
+const AddFarmModal = ({ isOpen, onClose, onFarmAdded, farm, editMode = false }) => {
 const [formData, setFormData] = useState({
     Name: "",
     size_c: "",
     unit_c: "acres",
     location_c: ""
   });
+  
+  // Populate form when editing
+  useEffect(() => {
+    if (editMode && farm) {
+      setFormData({
+        Name: farm.Name || "",
+        size_c: farm.size_c ? farm.size_c.toString() : "",
+        unit_c: farm.unit_c || "acres",
+        location_c: farm.location_c || ""
+      });
+    } else if (!editMode) {
+      setFormData({
+        Name: "",
+        size_c: "",
+        unit_c: "acres",
+        location_c: ""
+      });
+    }
+  }, [editMode, farm, isOpen]);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = async (e) => {
+const handleSubmit = async (e) => {
     e.preventDefault();
     
-if (!formData.Name.trim() || !formData.size_c || isNaN(parseFloat(formData.size_c)) || !formData.location_c.trim()) {
+    if (!formData.Name.trim() || !formData.size_c || isNaN(parseFloat(formData.size_c)) || !formData.location_c.trim()) {
       toast.error("Please fill in all required fields");
       return;
     }
 
     setIsSubmitting(true);
     try {
-const newFarm = await farmService.create({
+      const farmData = {
         Name: formData.Name.trim(),
         size_c: parseFloat(formData.size_c),
         unit_c: formData.unit_c,
         location_c: formData.location_c.trim(),
-        created_at_c: new Date().toISOString()
-      });
+        created_at_c: editMode ? farm.created_at_c : new Date().toISOString()
+      };
+
+      let result;
+      if (editMode) {
+        result = await farmService.update(farm.Id, farmData);
+        toast.success("Farm updated successfully!");
+      } else {
+        result = await farmService.create(farmData);
+        toast.success("Farm added successfully!");
+      }
       
-      onFarmAdded(newFarm);
-      toast.success("Farm added successfully!");
-setFormData({ Name: "", size_c: "", unit_c: "acres", location_c: "" });
+      onFarmAdded(result);
+      if (!editMode) {
+        setFormData({ Name: "", size_c: "", unit_c: "acres", location_c: "" });
+      }
       onClose();
     } catch (error) {
       toast.error("Failed to add farm");
@@ -64,7 +93,9 @@ setFormData({ Name: "", size_c: "", unit_c: "acres", location_c: "" });
             className="bg-white rounded-lg shadow-xl w-full max-w-md"
           >
             <div className="flex items-center justify-between p-6 border-b">
-              <h3 className="text-lg font-semibold text-gray-900">Add New Farm</h3>
+<h3 className="text-lg font-semibold text-gray-900">
+                {editMode ? "Edit Farm" : "Add New Farm"}
+              </h3>
               <button
                 onClick={onClose}
                 className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
@@ -133,12 +164,12 @@ setFormData({ Name: "", size_c: "", unit_c: "acres", location_c: "" });
                   {isSubmitting ? (
                     <>
                       <ApperIcon name="Loader2" size={16} className="mr-2 animate-spin" />
-                      Adding...
+{editMode ? "Updating..." : "Adding..."}
                     </>
                   ) : (
                     <>
-                      <ApperIcon name="Plus" size={16} className="mr-2" />
-                      Add Farm
+                      <ApperIcon name={editMode ? "Save" : "Plus"} size={16} className="mr-2" />
+                      {editMode ? "Update Farm" : "Add Farm"}
                     </>
                   )}
                 </Button>

@@ -1,16 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import EquipmentCard from "@/components/molecules/EquipmentCard";
-import AddEquipmentModal from "@/components/organisms/AddEquipmentModal";
-import Button from "@/components/atoms/Button";
-import Input from "@/components/atoms/Input";
-import Select from "@/components/atoms/Select";
-import Loading from "@/components/ui/Loading";
-import Error from "@/components/ui/Error";
-import Empty from "@/components/ui/Empty";
-import ApperIcon from "@/components/ApperIcon";
+import toast from "react-hot-toast";
 import { equipmentService } from "@/services/api/equipmentService";
 import { farmService } from "@/services/api/farmService";
+import ApperIcon from "@/components/ApperIcon";
+import AddEquipmentModal from "@/components/organisms/AddEquipmentModal";
+import EquipmentCard from "@/components/molecules/EquipmentCard";
+import Error from "@/components/ui/Error";
+import Empty from "@/components/ui/Empty";
+import Loading from "@/components/ui/Loading";
+import Farms from "@/components/pages/Farms";
+import Input from "@/components/atoms/Input";
+import Select from "@/components/atoms/Select";
+import Button from "@/components/atoms/Button";
 
 const Equipments = () => {
   const [equipments, setEquipments] = useState([]);
@@ -46,8 +48,26 @@ const Equipments = () => {
     }
   };
 
-  const handleEquipmentAdded = (newEquipment) => {
+const handleEquipmentAdded = (newEquipment) => {
     setEquipments(prev => [...prev, newEquipment]);
+  };
+
+  const handleEquipmentEdit = async (equipment) => {
+    // For now, just log - in a full implementation, you'd open an edit modal
+    console.log('Edit equipment:', equipment);
+    // This would trigger an edit modal similar to AddEquipmentModal in edit mode
+  };
+
+  const handleEquipmentDelete = async (equipment) => {
+    if (window.confirm(`Are you sure you want to delete "${equipment.Name}"? This action cannot be undone.`)) {
+      try {
+        await equipmentService.delete(equipment.Id);
+        setEquipments(prev => prev.filter(e => e.Id !== equipment.Id));
+        toast.success("Equipment deleted successfully!");
+      } catch (error) {
+        toast.error("Failed to delete equipment");
+      }
+    }
   };
 
   const handleEquipmentClick = (equipment) => {
@@ -237,9 +257,11 @@ const Equipments = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1 }}
             >
-              <EquipmentCard
+<EquipmentCard
                 equipment={equipment}
                 onClick={handleEquipmentClick}
+                onEdit={handleEquipmentEdit}
+                onDelete={handleEquipmentDelete}
               />
             </motion.div>
           ))}

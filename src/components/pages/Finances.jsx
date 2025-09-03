@@ -67,7 +67,7 @@ const Finances = () => {
 const farm = farms.find(f => f.Id === transaction.farm_id_c);
     const crop = crops.find(c => c.Id === transaction.crop_id_c);
     
-    const matchesSearch = (transaction.description_c || transaction.description)?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    const matchesSearch = (transaction.title_c || transaction.description_c || transaction.description)?.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          (transaction.category_c || transaction.category).toLowerCase().includes(searchTerm.toLowerCase()) ||
                          farm?.Name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          (crop?.type_c || crop?.type)?.toLowerCase().includes(searchTerm.toLowerCase());

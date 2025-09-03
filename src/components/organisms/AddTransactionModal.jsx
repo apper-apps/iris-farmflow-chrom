@@ -12,6 +12,7 @@ import { toast } from "react-toastify";
 
 const AddTransactionModal = ({ isOpen, onClose, onTransactionAdded, initialType = "expense" }) => {
 const [formData, setFormData] = useState({
+    title_c: "",
     farm_id_c: "",
     crop_id_c: "",
     type_c: initialType,
@@ -70,7 +71,7 @@ if (formData.farm_id_c) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-if (!formData.farm_id_c || !formData.category_c || !formData.amount_c || !formData.date_c) {
+if (!formData.title_c || !formData.farm_id_c || !formData.category_c || !formData.amount_c || !formData.date_c) {
       toast.error("Please fill in all required fields");
       return;
     }
@@ -83,6 +84,7 @@ if (!formData.farm_id_c || !formData.category_c || !formData.amount_c || !formDa
     setIsSubmitting(true);
     try {
 const newTransaction = await transactionService.create({
+        title_c: formData.title_c.trim(),
         farm_id_c: parseInt(formData.farm_id_c),
         crop_id_c: formData.crop_id_c ? parseInt(formData.crop_id_c) : null,
         type_c: formData.type_c,
@@ -95,6 +97,7 @@ const newTransaction = await transactionService.create({
       onTransactionAdded(newTransaction);
 toast.success(`${formData.type_c === 'income' ? 'Income' : 'Expense'} recorded successfully!`);
 setFormData({
+        title_c: "",
         farm_id_c: "",
         crop_id_c: "",
         type_c: initialType,
@@ -165,7 +168,17 @@ setFormData({
                   Income
                 </Button>
               </div>
-
+{/* Title Field */}
+              <div className="space-y-2">
+                <Input
+                  label="Title*"
+                  name="title_c"
+                  value={formData.title_c}
+                  onChange={handleChange}
+                  placeholder="Enter transaction title"
+                  className="w-full"
+                />
+              </div>
               <Select
                 label="Farm"
                 name="farmId"

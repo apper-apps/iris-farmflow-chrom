@@ -38,8 +38,11 @@ name={isIncome ? "TrendingUp" : getCategoryIcon(transaction.category_c || transa
             size={18}
           />
         </div>
-        <div>
-<p className="font-medium text-gray-900">{transaction.description_c || transaction.description || transaction.category_c || transaction.category}</p>
+<div>
+          <p className="font-medium text-gray-900">{transaction.title_c || transaction.description_c || transaction.description || transaction.category_c || transaction.category}</p>
+          {transaction.title_c && (transaction.description_c || transaction.description) && (
+            <p className="text-sm text-gray-600 mt-1">{transaction.description_c || transaction.description}</p>
+          )}
           <div className="flex items-center gap-2 text-sm text-gray-500">
 <span>{farm?.Name}</span>
             {crop && (

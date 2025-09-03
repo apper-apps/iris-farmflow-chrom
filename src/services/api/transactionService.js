@@ -14,7 +14,8 @@ class TransactionService {
       const params = {
         fields: [
           { field: { Name: "Id" } },
-          { field: { Name: "Name" } },
+{ field: { Name: "Name" } },
+          { field: { Name: "title_c" } },
           { field: { Name: "Tags" } },
           { field: { Name: "farm_id_c" } },
           { field: { Name: "crop_id_c" } },
@@ -55,7 +56,8 @@ class TransactionService {
       const params = {
         fields: [
           { field: { Name: "Id" } },
-          { field: { Name: "Name" } },
+{ field: { Name: "Name" } },
+          { field: { Name: "title_c" } },
           { field: { Name: "Tags" } },
           { field: { Name: "farm_id_c" } },
           { field: { Name: "crop_id_c" } },
@@ -90,7 +92,8 @@ class TransactionService {
       const params = {
         fields: [
           { field: { Name: "Id" } },
-          { field: { Name: "Name" } },
+{ field: { Name: "Name" } },
+          { field: { Name: "title_c" } },
           { field: { Name: "Tags" } },
           { field: { Name: "farm_id_c" } },
           { field: { Name: "crop_id_c" } },
@@ -131,7 +134,8 @@ class TransactionService {
     try {
       const params = {
         fields: [
-          { field: { Name: "Id" } },
+{ field: { Name: "Id" } },
+          { field: { Name: "title_c" } },
           { field: { Name: "Name" } },
           { field: { Name: "Tags" } },
           { field: { Name: "farm_id_c" } },
@@ -174,7 +178,8 @@ class TransactionService {
       const params = {
         fields: [
           { field: { Name: "Id" } },
-          { field: { Name: "Name" } },
+{ field: { Name: "Name" } },
+          { field: { Name: "title_c" } },
           { field: { Name: "Tags" } },
           { field: { Name: "farm_id_c" } },
           { field: { Name: "crop_id_c" } },
@@ -217,7 +222,7 @@ class TransactionService {
         records: [
           {
             // Only include Updateable fields
-            Name: transactionData.Name || transactionData.description,
+Name: transactionData.Name || transactionData.title_c || transactionData.description,
             Tags: transactionData.Tags || "",
             farm_id_c: parseInt(transactionData.farm_id_c || transactionData.farmId),
             crop_id_c: transactionData.crop_id_c || transactionData.cropId ? parseInt(transactionData.crop_id_c || transactionData.cropId) : null,
@@ -268,7 +273,8 @@ class TransactionService {
         records: [
           {
             Id: parseInt(id),
-            // Only include Updateable fields
+// Only include Updateable fields
+            title_c: transactionData.title_c,
             Name: transactionData.Name || transactionData.description,
             Tags: transactionData.Tags || "",
             farm_id_c: parseInt(transactionData.farm_id_c || transactionData.farmId),

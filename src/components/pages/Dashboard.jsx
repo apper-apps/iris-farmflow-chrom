@@ -327,41 +327,41 @@ const recentCrops = data.crops
       </Card>
 
       {/* Modals */}
-      <AddFarmModal
+<AddFarmModal
         isOpen={showAddFarmModal}
         onClose={() => setShowAddFarmModal(false)}
-        onSuccess={() => {
+        onFarmAdded={() => {
           setShowAddFarmModal(false);
           loadDashboardData();
         }}
       />
       
-      <AddCropModal
+<AddCropModal
         isOpen={showAddCropModal}
         onClose={() => setShowAddCropModal(false)}
         farms={data.farms}
-        onSuccess={() => {
+        onCropAdded={() => {
           setShowAddCropModal(false);
           loadDashboardData();
         }}
       />
       
-      <AddTaskModal
+<AddTaskModal
         isOpen={showAddTaskModal}
         onClose={() => setShowAddTaskModal(false)}
         farms={data.farms}
         crops={data.crops}
-        onSuccess={() => {
+        onTaskAdded={() => {
           setShowAddTaskModal(false);
           loadDashboardData();
         }}
       />
       
-      <AddEquipmentModal
+<AddEquipmentModal
         isOpen={showAddEquipmentModal}
         onClose={() => setShowAddEquipmentModal(false)}
         farms={data.farms}
-        onSuccess={() => {
+        onEquipmentAdded={() => {
           setShowAddEquipmentModal(false);
           loadDashboardData();
         }}

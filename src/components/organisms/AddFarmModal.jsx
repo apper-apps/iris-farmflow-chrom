@@ -19,7 +19,7 @@ const [formData, setFormData] = useState({
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-if (!formData.Name.trim() || !formData.size_c || !formData.location_c.trim()) {
+if (!formData.Name.trim() || !formData.size_c || isNaN(parseFloat(formData.size_c)) || !formData.location_c.trim()) {
       toast.error("Please fill in all required fields");
       return;
     }
@@ -101,10 +101,8 @@ setFormData({ Name: "", size_c: "", unit_c: "acres", location_c: "" });
                   value={formData.unit_c}
                   onChange={handleChange}
                 >
-                  <option value="acres">Acres</option>
+<option value="acres">Acres</option>
                   <option value="hectares">Hectares</option>
-                  <option value="sq-ft">Square Feet</option>
-                  <option value="sq-m">Square Meters</option>
                 </Select>
               </div>
 

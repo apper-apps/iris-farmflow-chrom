@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { endOfMonth, format, startOfMonth, subMonths } from "date-fns";
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
 import { transactionService } from "@/services/api/transactionService";
 import { farmService } from "@/services/api/farmService";
 import { cropService } from "@/services/api/cropService";

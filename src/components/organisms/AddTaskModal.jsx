@@ -17,7 +17,8 @@ const [formData, setFormData] = useState({
     title_c: "",
     description_c: "",
     due_date_c: "",
-    priority_c: "medium"
+    priority_c: "medium",
+    status_c: "open"
   });
   const [farms, setFarms] = useState([]);
   const [crops, setCrops] = useState([]);
@@ -74,6 +75,7 @@ const newTask = await taskService.create({
         description_c: formData.description_c.trim(),
         due_date_c: formData.due_date_c,
         priority_c: formData.priority_c,
+        status_c: formData.status_c,
         completed_c: false,
         created_at_c: new Date().toISOString()
       });
@@ -86,7 +88,8 @@ setFormData({
         title_c: "",
         description_c: "",
         due_date_c: "",
-        priority_c: "medium"
+        priority_c: "medium",
+        status_c: "open"
       });
       onClose();
     } catch (error) {
@@ -183,6 +186,33 @@ setFormData({
                   <option value="low">Low</option>
                   <option value="medium">Medium</option>
                   <option value="high">High</option>
+                </Select>
+</div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <Select
+                  label="Status"
+                  name="status_c"
+                  value={formData.status_c}
+                  onChange={handleChange}
+                  required
+                >
+                  <option value="open">Open</option>
+                  <option value="in progress">In Progress</option>
+                  <option value="completed">Completed</option>
+                  <option value="on hold">On Hold</option>
+                </Select>
+
+                <Select
+                  label="Priority"
+                  name="priority_c"
+                  value={formData.priority_c}
+                  onChange={handleChange}
+                  required
+                >
+                  <option value="high">High</option>
+                  <option value="medium">Medium</option>
+                  <option value="low">Low</option>
                 </Select>
               </div>
 

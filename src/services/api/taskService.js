@@ -179,7 +179,7 @@ class TaskService {
         records: [
           {
             // Only include Updateable fields
-            Name: taskData.Name || taskData.title,
+Name: taskData.Name || taskData.title_c || taskData.title,
             Tags: taskData.Tags || "",
             title_c: taskData.title_c || taskData.title,
             description_c: taskData.description_c || taskData.description || "",
@@ -187,6 +187,7 @@ class TaskService {
             priority_c: taskData.priority_c || taskData.priority || "medium",
             completed_c: taskData.completed_c || taskData.completed || false,
             created_at_c: new Date().toISOString(),
+            status_c: taskData.status_c || "open",
             farm_id_c: parseInt(taskData.farm_id_c || taskData.farmId),
             crop_id_c: taskData.crop_id_c || taskData.cropId ? parseInt(taskData.crop_id_c || taskData.cropId) : null
           }

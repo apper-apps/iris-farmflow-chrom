@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import Input from "@/components/atoms/Input";
-import Select from "@/components/atoms/Select";
-import Textarea from "@/components/atoms/Textarea";
-import Button from "@/components/atoms/Button";
-import ApperIcon from "@/components/ApperIcon";
+import React, { useEffect, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import { taskService } from "@/services/api/taskService";
 import { farmService } from "@/services/api/farmService";
 import { cropService } from "@/services/api/cropService";
 import { toast } from "react-toastify";
+import ApperIcon from "@/components/ApperIcon";
+import Input from "@/components/atoms/Input";
+import Textarea from "@/components/atoms/Textarea";
+import Select from "@/components/atoms/Select";
+import Button from "@/components/atoms/Button";
 
 const AddTaskModal = ({ isOpen, onClose, onTaskAdded }) => {
 const [formData, setFormData] = useState({
@@ -202,19 +202,6 @@ label="Priority"
                   <option value="completed">Completed</option>
                   <option value="on hold">On Hold</option>
                 </Select>
-
-                <Select
-                  label="Priority"
-                  name="priority_c"
-                  value={formData.priority_c}
-                  onChange={handleChange}
-                  required
-                >
-                  <option value="high">High</option>
-                  <option value="medium">Medium</option>
-                  <option value="low">Low</option>
-                </Select>
-              </div>
 
 <Textarea
                 label="Description (optional)"

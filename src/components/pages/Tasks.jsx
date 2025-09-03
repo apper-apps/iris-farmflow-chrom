@@ -27,10 +27,32 @@ const Tasks = () => {
   const [priorityFilter, setPriorityFilter] = useState("all");
   const [statusFilter, setStatusFilter] = useState("all");
   const [showAddModal, setShowAddModal] = useState(false);
+  const { checkTaskNotifications } = useNotification();
 
   useEffect(() => {
     loadData();
   }, []);
+
+  // Check for task notifications when tasks or filters change
+  useEffect(() => {
+    if (tasks.length > 0) {
+      try {
+        const filteredTasks = tasks.filter(task => {
+          const matchesSearch = task.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                               task.description?.toLowerCase().includes(searchTerm.toLowerCase());
+          const matchesPriority = priorityFilter === "all" || task.priority === priorityFilter;
+          const matchesStatus = statusFilter === "all" || 
+                               (statusFilter === "completed" && task.completed) ||
+                               (statusFilter === "pending" && !task.completed);
+          
+          return matchesSearch && matchesPriority && matchesStatus;
+        });
+        checkTaskNotifications(filteredTasks);
+      } catch (notificationError) {
+        console.error('Failed to check task notifications:', notificationError);
+      }
+    }
+  }, [tasks, searchTerm, priorityFilter, statusFilter, checkTaskNotifications]);
 
   const loadData = async () => {
     try {
@@ -63,7 +85,7 @@ const Tasks = () => {
     ));
   };
 
-  const categorizedTasks = () => {
+const categorizedTasks = () => {
     const filteredTasks = tasks.filter(task => {
       const matchesSearch = task.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                            task.description?.toLowerCase().includes(searchTerm.toLowerCase());
@@ -74,11 +96,6 @@ const Tasks = () => {
       
       return matchesSearch && matchesPriority && matchesStatus;
     });
-
-const { checkTaskNotifications } = useNotification();
-    
-    // Check for tasks that need notifications
-    checkTaskNotifications(filteredTasks);
     
     return {
       overdue: filteredTasks.filter(task => !task.completed && isPast(new Date(task.dueDate)) && !isToday(new Date(task.dueDate))),

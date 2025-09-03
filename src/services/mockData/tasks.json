@@ -1,0 +1,112 @@
+[
+  {
+    "Id": 1,
+    "farmId": 1,
+    "cropId": 1,
+    "title": "Water corn fields",
+    "description": "Deep watering session for the drought-resistant corn variety",
+    "dueDate": "2024-08-15",
+    "priority": "high",
+    "completed": false,
+    "createdAt": "2024-08-10T09:00:00Z"
+  },
+  {
+    "Id": 2,
+    "farmId": 1,
+    "cropId": 2,
+    "title": "Apply fertilizer to soybeans",
+    "description": "Second application of organic fertilizer for optimal growth",
+    "dueDate": "2024-08-16",
+    "priority": "medium",
+    "completed": false,
+    "createdAt": "2024-08-12T14:30:00Z"
+  },
+  {
+    "Id": 3,
+    "farmId": 2,
+    "cropId": 3,
+    "title": "Harvest wheat",
+    "description": "Begin harvesting the winter wheat - weather conditions are perfect",
+    "dueDate": "2024-08-14",
+    "priority": "high",
+    "completed": false,
+    "createdAt": "2024-08-11T07:15:00Z"
+  },
+  {
+    "Id": 4,
+    "farmId": 2,
+    "cropId": 4,
+    "title": "Prune tomato plants",
+    "description": "Remove suckers and maintain plant structure",
+    "dueDate": "2024-08-17",
+    "priority": "medium",
+    "completed": false,
+    "createdAt": "2024-08-13T11:45:00Z"
+  },
+  {
+    "Id": 5,
+    "farmId": 3,
+    "cropId": 5,
+    "title": "Inspect almond trees",
+    "description": "Check for pests and assess readiness for harvest",
+    "dueDate": "2024-08-15",
+    "priority": "medium",
+    "completed": true,
+    "createdAt": "2024-08-08T16:20:00Z"
+  },
+  {
+    "Id": 6,
+    "farmId": 3,
+    "cropId": 6,
+    "title": "Thin sunflower stands",
+    "description": "Remove weaker plants to ensure optimal spacing",
+    "dueDate": "2024-08-20",
+    "priority": "low",
+    "completed": false,
+    "createdAt": "2024-08-12T10:30:00Z"
+  },
+  {
+    "Id": 7,
+    "farmId": 4,
+    "cropId": 8,
+    "title": "Check irrigation system",
+    "description": "Ensure all sprinklers are functioning properly for lettuce beds",
+    "dueDate": "2024-08-18",
+    "priority": "high",
+    "completed": false,
+    "createdAt": "2024-08-14T08:00:00Z"
+  },
+  {
+    "Id": 8,
+    "farmId": 1,
+    "cropId": null,
+    "title": "Maintain farm equipment",
+    "description": "Service tractors and harvesting equipment before busy season",
+    "dueDate": "2024-08-19",
+    "priority": "medium",
+    "completed": false,
+    "createdAt": "2024-08-10T12:00:00Z"
+  },
+  {
+    "Id": 9,
+    "farmId": 2,
+    "cropId": null,
+    "title": "Repair fence in north field",
+    "description": "Fix damaged section to prevent livestock entry",
+    "dueDate": "2024-08-16",
+    "priority": "high",
+    "completed": false,
+    "createdAt": "2024-08-13T15:30:00Z"
+  },
+  {
+    "Id": 10,
+    "farmId": 4,
+    "cropId": 7,
+    "title": "Prepare soil for next planting",
+    "description": "Till and amend soil in harvested carrot field",
+    "dueDate": "2024-08-22",
+    "priority": "low",
+    "completed": false,
+    "createdAt": "2024-07-20T13:15:00Z"
+  }
+]

@@ -1,0 +1,34 @@
+[
+  {
+    "Id": 1,
+    "name": "Sunrise Valley Farm",
+    "size": 150.5,
+    "unit": "acres",
+    "location": "Riverside County, CA",
+    "createdAt": "2023-03-15T08:30:00Z"
+  },
+  {
+    "Id": 2,
+    "name": "Green Meadows Ranch",
+    "size": 89.2,
+    "unit": "acres",
+    "location": "Fresno County, CA", 
+    "createdAt": "2023-05-22T10:15:00Z"
+  },
+  {
+    "Id": 3,
+    "name": "Golden Harvest Fields",
+    "size": 203.8,
+    "unit": "acres",
+    "location": "San Joaquin County, CA",
+    "createdAt": "2023-01-10T14:45:00Z"
+  },
+  {
+    "Id": 4,
+    "name": "Rolling Hills Farm",
+    "size": 67.3,
+    "unit": "acres",
+    "location": "Kern County, CA",
+    "createdAt": "2023-07-08T09:20:00Z"
+  }
+]

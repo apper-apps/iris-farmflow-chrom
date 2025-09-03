@@ -1,0 +1,122 @@
+[
+  {
+    "Id": 1,
+    "farmId": 1,
+    "cropId": 1,
+    "type": "expense",
+    "category": "seeds",
+    "amount": 1250.00,
+    "date": "2024-04-10",
+    "description": "Drought-resistant corn seed variety"
+  },
+  {
+    "Id": 2,
+    "farmId": 1,
+    "cropId": 2,
+    "type": "expense",
+    "category": "fertilizer",
+    "amount": 890.50,
+    "date": "2024-05-15",
+    "description": "Organic fertilizer for soybean crop"
+  },
+  {
+    "Id": 3,
+    "farmId": 2,
+    "cropId": 3,
+    "type": "income",
+    "category": "harvest",
+    "amount": 12500.00,
+    "date": "2024-08-12",
+    "description": "Winter wheat harvest sale to local mill"
+  },
+  {
+    "Id": 4,
+    "farmId": 2,
+    "cropId": null,
+    "type": "expense",
+    "category": "equipment",
+    "amount": 3200.00,
+    "date": "2024-07-20",
+    "description": "New irrigation system for greenhouse"
+  },
+  {
+    "Id": 5,
+    "farmId": 3,
+    "cropId": 5,
+    "type": "expense",
+    "category": "labor",
+    "amount": 2100.00,
+    "date": "2024-08-01",
+    "description": "Seasonal workers for almond harvest preparation"
+  },
+  {
+    "Id": 6,
+    "farmId": 4,
+    "cropId": 7,
+    "type": "income",
+    "category": "sales",
+    "amount": 4750.00,
+    "date": "2024-07-18",
+    "description": "Carrot harvest sold to organic grocery chain"
+  },
+  {
+    "Id": 7,
+    "farmId": 1,
+    "cropId": null,
+    "type": "expense",
+    "category": "fuel",
+    "amount": 680.25,
+    "date": "2024-08-05",
+    "description": "Diesel fuel for tractors and equipment"
+  },
+  {
+    "Id": 8,
+    "farmId": 3,
+    "cropId": 6,
+    "type": "expense",
+    "category": "seeds",
+    "amount": 1800.00,
+    "date": "2024-05-25",
+    "description": "High oil content sunflower seeds"
+  },
+  {
+    "Id": 9,
+    "farmId": 2,
+    "cropId": null,
+    "type": "expense",
+    "category": "maintenance",
+    "amount": 1150.00,
+    "date": "2024-07-30",
+    "description": "Tractor maintenance and repairs"
+  },
+  {
+    "Id": 10,
+    "farmId": 4,
+    "cropId": 8,
+    "type": "expense",
+    "category": "seeds",
+    "amount": 320.00,
+    "date": "2024-06-10",
+    "description": "Multiple lettuce varieties for extended harvest"
+  },
+  {
+    "Id": 11,
+    "farmId": 1,
+    "cropId": 1,
+    "type": "expense",
+    "category": "fertilizer",
+    "amount": 950.00,
+    "date": "2024-08-10",
+    "description": "Mid-season fertilizer application for corn"
+  },
+  {
+    "Id": 12,
+    "farmId": 3,
+    "cropId": null,
+    "type": "income",
+    "category": "subsidies",
+    "amount": 2500.00,
+    "date": "2024-08-01",
+    "description": "Government sustainable farming incentive"
+  }
+]

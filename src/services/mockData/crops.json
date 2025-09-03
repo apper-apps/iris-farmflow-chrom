@@ -1,0 +1,82 @@
+[
+  {
+    "Id": 1,
+    "farmId": 1,
+    "type": "Corn",
+    "plantingDate": "2024-04-15",
+    "expectedHarvestDate": "2024-09-15",
+    "status": "growing",
+    "area": 45.2,
+    "notes": "Planted with new drought-resistant variety"
+  },
+  {
+    "Id": 2,
+    "farmId": 1,
+    "type": "Soybeans",
+    "plantingDate": "2024-05-01",
+    "expectedHarvestDate": "2024-10-01",
+    "status": "growing",
+    "area": 38.7,
+    "notes": "Organic certification maintained"
+  },
+  {
+    "Id": 3,
+    "farmId": 2,
+    "type": "Wheat",
+    "plantingDate": "2024-03-10",
+    "expectedHarvestDate": "2024-08-10",
+    "status": "ready",
+    "area": 65.5,
+    "notes": "Winter wheat variety showing excellent growth"
+  },
+  {
+    "Id": 4,
+    "farmId": 2,
+    "type": "Tomatoes",
+    "plantingDate": "2024-05-20",
+    "expectedHarvestDate": "2024-09-20",
+    "status": "growing",
+    "area": 12.8,
+    "notes": "Greenhouse variety for premium market"
+  },
+  {
+    "Id": 5,
+    "farmId": 3,
+    "type": "Almonds",
+    "plantingDate": "2024-02-28",
+    "expectedHarvestDate": "2024-08-28",
+    "status": "ready",
+    "area": 95.6,
+    "notes": "Third year orchard, expecting good yield"
+  },
+  {
+    "Id": 6,
+    "farmId": 3,
+    "type": "Sunflowers",
+    "plantingDate": "2024-06-01",
+    "expectedHarvestDate": "2024-10-15",
+    "status": "planted",
+    "area": 78.2,
+    "notes": "High oil content variety for processing"
+  },
+  {
+    "Id": 7,
+    "farmId": 4,
+    "type": "Carrots",
+    "plantingDate": "2024-04-01",
+    "expectedHarvestDate": "2024-07-15",
+    "status": "harvested",
+    "area": 23.4,
+    "notes": "Harvested early due to excellent growing conditions"
+  },
+  {
+    "Id": 8,
+    "farmId": 4,
+    "type": "Lettuce",
+    "plantingDate": "2024-06-15",
+    "expectedHarvestDate": "2024-08-30",
+    "status": "growing",
+    "area": 18.9,
+    "notes": "Multiple varieties for extended harvest period"
+  }
+]

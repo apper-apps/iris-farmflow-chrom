@@ -1,0 +1,231 @@
+import React, { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import Input from "@/components/atoms/Input";
+import Select from "@/components/atoms/Select";
+import Textarea from "@/components/atoms/Textarea";
+import Button from "@/components/atoms/Button";
+import ApperIcon from "@/components/ApperIcon";
+import { cropService } from "@/services/api/cropService";
+import { farmService } from "@/services/api/farmService";
+import { toast } from "react-toastify";
+
+const AddCropModal = ({ isOpen, onClose, onCropAdded }) => {
+  const [formData, setFormData] = useState({
+    farmId: "",
+    type: "",
+    plantingDate: "",
+    expectedHarvestDate: "",
+    status: "planted",
+    area: "",
+    notes: ""
+  });
+  const [farms, setFarms] = useState([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    if (isOpen) {
+      loadFarms();
+    }
+  }, [isOpen]);
+
+  const loadFarms = async () => {
+    setIsLoading(true);
+    try {
+      const farmsData = await farmService.getAll();
+      setFarms(farmsData);
+    } catch (error) {
+      toast.error("Failed to load farms");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    
+    if (!formData.farmId || !formData.type.trim() || !formData.plantingDate || !formData.expectedHarvestDate || !formData.area) {
+      toast.error("Please fill in all required fields");
+      return;
+    }
+
+    if (new Date(formData.expectedHarvestDate) <= new Date(formData.plantingDate)) {
+      toast.error("Expected harvest date must be after planting date");
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      const newCrop = await cropService.create({
+        farmId: parseInt(formData.farmId),
+        type: formData.type.trim(),
+        plantingDate: formData.plantingDate,
+        expectedHarvestDate: formData.expectedHarvestDate,
+        status: formData.status,
+        area: parseFloat(formData.area),
+        notes: formData.notes.trim()
+      });
+      
+      onCropAdded(newCrop);
+      toast.success("Crop added successfully!");
+      setFormData({
+        farmId: "",
+        type: "",
+        plantingDate: "",
+        expectedHarvestDate: "",
+        status: "planted",
+        area: "",
+        notes: ""
+      });
+      onClose();
+    } catch (error) {
+      toast.error("Failed to add crop");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  return (
+    <AnimatePresence>
+      {isOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.9 }}
+            className="bg-white rounded-lg shadow-xl w-full max-w-lg max-h-[90vh] overflow-y-auto"
+          >
+            <div className="flex items-center justify-between p-6 border-b">
+              <h3 className="text-lg font-semibold text-gray-900">Add New Crop</h3>
+              <button
+                onClick={onClose}
+                className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+              >
+                <ApperIcon name="X" size={18} />
+              </button>
+            </div>
+
+            <form onSubmit={handleSubmit} className="p-6 space-y-4">
+              <Select
+                label="Farm"
+                name="farmId"
+                value={formData.farmId}
+                onChange={handleChange}
+                disabled={isLoading}
+                required
+              >
+                <option value="">Select a farm</option>
+                {farms.map(farm => (
+                  <option key={farm.Id} value={farm.Id}>
+                    {farm.name} ({farm.size} {farm.unit})
+                  </option>
+                ))}
+              </Select>
+
+              <Input
+                label="Crop Type"
+                name="type"
+                value={formData.type}
+                onChange={handleChange}
+                placeholder="e.g., Corn, Wheat, Tomatoes"
+                required
+              />
+
+              <div className="grid grid-cols-2 gap-4">
+                <Input
+                  label="Planting Date"
+                  name="plantingDate"
+                  type="date"
+                  value={formData.plantingDate}
+                  onChange={handleChange}
+                  required
+                />
+                <Input
+                  label="Expected Harvest Date"
+                  name="expectedHarvestDate"
+                  type="date"
+                  value={formData.expectedHarvestDate}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <Input
+                  label="Area (acres)"
+                  name="area"
+                  type="number"
+                  value={formData.area}
+                  onChange={handleChange}
+                  placeholder="Enter area"
+                  min="0"
+                  step="0.1"
+                  required
+                />
+                <Select
+                  label="Status"
+                  name="status"
+                  value={formData.status}
+                  onChange={handleChange}
+                >
+                  <option value="planted">Planted</option>
+                  <option value="growing">Growing</option>
+                  <option value="ready">Ready</option>
+                  <option value="harvested">Harvested</option>
+                </Select>
+              </div>
+
+              <Textarea
+                label="Notes (optional)"
+                name="notes"
+                value={formData.notes}
+                onChange={handleChange}
+                placeholder="Any additional notes about this crop..."
+                rows={3}
+              />
+
+              <div className="flex gap-3 pt-4">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={onClose}
+                  className="flex-1"
+                >
+                  Cancel
+                </Button>
+                <Button
+                  type="submit"
+                  variant="primary"
+                  disabled={isSubmitting || isLoading}
+                  className="flex-1"
+                >
+                  {isSubmitting ? (
+                    <>
+                      <ApperIcon name="Loader2" size={16} className="mr-2 animate-spin" />
+                      Adding...
+                    </>
+                  ) : (
+                    <>
+                      <ApperIcon name="Plus" size={16} className="mr-2" />
+                      Add Crop
+                    </>
+                  )}
+                </Button>
+              </div>
+            </form>
+          </motion.div>
+        </div>
+      )}
+    </AnimatePresence>
+  );
+};
+
+export default AddCropModal;

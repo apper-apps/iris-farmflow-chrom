@@ -74,31 +74,31 @@ setFormData({ Name: "", size_c: "", unit_c: "acres", location_c: "" });
             </div>
 
             <form onSubmit={handleSubmit} className="p-6 space-y-4">
-              <Input
+<Input
                 label="Farm Name"
-                name="name"
-                value={formData.name}
+                name="Name"
+                value={formData.Name}
                 onChange={handleChange}
                 placeholder="Enter farm name"
                 required
               />
 
               <div className="grid grid-cols-2 gap-4">
-                <Input
+<Input
                   label="Size"
-                  name="size"
+                  name="size_c"
                   type="number"
-                  value={formData.size}
+                  value={formData.size_c}
                   onChange={handleChange}
                   placeholder="Enter size"
                   min="0"
                   step="0.1"
                   required
                 />
-                <Select
+<Select
                   label="Unit"
-                  name="unit"
-                  value={formData.unit}
+                  name="unit_c"
+                  value={formData.unit_c}
                   onChange={handleChange}
                 >
                   <option value="acres">Acres</option>
@@ -108,10 +108,10 @@ setFormData({ Name: "", size_c: "", unit_c: "acres", location_c: "" });
                 </Select>
               </div>
 
-              <Input
+<Input
                 label="Location"
-                name="location"
-                value={formData.location}
+                name="location_c"
+                value={formData.location_c}
                 onChange={handleChange}
                 placeholder="Enter farm location"
                 required

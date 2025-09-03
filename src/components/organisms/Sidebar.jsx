@@ -4,11 +4,12 @@ import { motion } from "framer-motion";
 import ApperIcon from "@/components/ApperIcon";
 
 const Sidebar = ({ isOpen, onClose }) => {
-  const menuItems = [
+const menuItems = [
     { to: "/", icon: "Home", label: "Dashboard" },
     { to: "/farms", icon: "Tractor", label: "Farms" },
     { to: "/crops", icon: "Leaf", label: "Crops" },
     { to: "/tasks", icon: "CheckSquare", label: "Tasks" },
+    { to: "/equipments", icon: "Truck", label: "Equipment" },
     { to: "/finances", icon: "DollarSign", label: "Finances" },
     { to: "/weather", icon: "Cloud", label: "Weather" },
   ];

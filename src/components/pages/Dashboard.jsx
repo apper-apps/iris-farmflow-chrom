@@ -253,7 +253,7 @@ const farm = data.farms.find(f => f.Id === crop.farm_id_c);
       {/* Quick Actions */}
       <Card>
         <h3 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+<div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <Button variant="outline" className="h-20 flex-col">
             <ApperIcon name="Plus" size={20} className="mb-2" />
             <span className="text-sm">Add Farm</span>
@@ -267,8 +267,8 @@ const farm = data.farms.find(f => f.Id === crop.farm_id_c);
             <span className="text-sm">Add Task</span>
           </Button>
           <Button variant="outline" className="h-20 flex-col">
-            <ApperIcon name="DollarSign" size={20} className="mb-2" />
-            <span className="text-sm">Record Expense</span>
+            <ApperIcon name="Truck" size={20} className="mb-2" />
+            <span className="text-sm">Add Equipment</span>
           </Button>
         </div>
       </Card>

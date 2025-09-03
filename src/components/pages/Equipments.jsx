@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
 import { equipmentService } from "@/services/api/equipmentService";
 import { farmService } from "@/services/api/farmService";
 import ApperIcon from "@/components/ApperIcon";

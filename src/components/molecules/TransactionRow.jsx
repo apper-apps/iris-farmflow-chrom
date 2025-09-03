@@ -49,7 +49,12 @@ name={isIncome ? "TrendingUp" : getCategoryIcon(transaction.category_c || transa
               </>
             )}
             <span>•</span>
-            <span>{format(new Date(transaction.date), "MMM d, yyyy")}</span>
+<span>
+              {(() => {
+                const date = new Date(transaction.date_c || transaction.date);
+                return date && !isNaN(date.getTime()) ? format(date, "MMM d, yyyy") : "Invalid date";
+              })()}
+            </span>
           </div>
         </div>
       </div>

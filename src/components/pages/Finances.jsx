@@ -79,14 +79,17 @@ const matchesType = typeFilter === "all" || (transaction.type_c || transaction.t
 
   const getFinancialStats = () => {
 const thisMonth = transactions.filter(t => {
-      const transactionDate = new Date(t.date_c || t.date);
-      return transactionDate >= startOfMonth(new Date()) && transactionDate <= endOfMonth(new Date());
+const transactionDate = new Date(t.date_c || t.date);
+      const isValidDate = transactionDate && !isNaN(transactionDate.getTime());
+      return isValidDate && transactionDate >= startOfMonth(new Date()) && transactionDate <= endOfMonth(new Date());
     });
 
     const lastMonth = transactions.filter(t => {
       const lastMonthStart = startOfMonth(subMonths(new Date(), 1));
-      const lastMonthEnd = endOfMonth(subMonths(new Date(), 1));
-      const transactionDate = new Date(t.date);
+const lastMonthEnd = endOfMonth(subMonths(new Date(), 1));
+      const transactionDate = new Date(t.date_c || t.date);
+      const isValidTransactionDate = transactionDate && !isNaN(transactionDate.getTime());
+      if (!isValidTransactionDate) return 0;
       return transactionDate >= lastMonthStart && transactionDate <= lastMonthEnd;
     });
 

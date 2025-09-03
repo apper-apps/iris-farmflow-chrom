@@ -45,7 +45,19 @@ const updatedTask = await taskService.update(task.Id, {
     }
   };
 
-const isOverdue = new Date(task.due_date_c || task.dueDate) < new Date() && !(task.completed_c || task.completed);
+// Helper function to validate dates
+  const isValidDate = (date) => {
+    return date instanceof Date && !isNaN(date.getTime());
+  };
+
+  const safeParseDate = (dateValue) => {
+    if (!dateValue) return null;
+    const parsed = new Date(dateValue);
+    return isValidDate(parsed) ? parsed : null;
+  };
+
+  const taskDueDate = safeParseDate(task.due_date_c || task.dueDate);
+  const isOverdue = taskDueDate && taskDueDate < new Date() && !(task.completed_c || task.completed);
 
   return (
     <motion.div
@@ -82,7 +94,7 @@ const isOverdue = new Date(task.due_date_c || task.dueDate) < new Date() && !(ta
               <div className="flex items-center gap-1">
                 <ApperIcon name="Calendar" size={14} />
 <span className={isOverdue ? "text-red-600 font-medium" : ""}>
-                  {format(new Date(task.due_date_c || task.dueDate), "MMM d, yyyy")}
+                  {taskDueDate ? format(taskDueDate, "MMM d, yyyy") : "No due date"}
                 </span>
               </div>
             </div>

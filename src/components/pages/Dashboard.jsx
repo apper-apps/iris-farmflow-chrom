@@ -1,22 +1,24 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { format, isToday, isTomorrow, isThisWeek } from "date-fns";
-import StatCard from "@/components/molecules/StatCard";
-import WeatherCard from "@/components/molecules/WeatherCard";
-import TaskCard from "@/components/molecules/TaskCard";
-import CropCard from "@/components/molecules/CropCard";
-import Card from "@/components/atoms/Card";
-import Button from "@/components/atoms/Button";
-import Loading from "@/components/ui/Loading";
-import Error from "@/components/ui/Error";
-import Empty from "@/components/ui/Empty";
-import ApperIcon from "@/components/ApperIcon";
+import { format, isThisWeek, isToday, isTomorrow } from "date-fns";
 import { farmService } from "@/services/api/farmService";
 import { cropService } from "@/services/api/cropService";
 import { taskService } from "@/services/api/taskService";
 import { transactionService } from "@/services/api/transactionService";
 import { weatherService } from "@/services/api/weatherService";
 import { useNotification } from "@/services/NotificationProvider";
+import ApperIcon from "@/components/ApperIcon";
+import CropCard from "@/components/molecules/CropCard";
+import TaskCard from "@/components/molecules/TaskCard";
+import WeatherCard from "@/components/molecules/WeatherCard";
+import StatCard from "@/components/molecules/StatCard";
+import Error from "@/components/ui/Error";
+import Empty from "@/components/ui/Empty";
+import Loading from "@/components/ui/Loading";
+import Crops from "@/components/pages/Crops";
+import Tasks from "@/components/pages/Tasks";
+import Button from "@/components/atoms/Button";
+import Card from "@/components/atoms/Card";
 
 const Dashboard = () => {
   const { checkTaskNotifications } = useNotification();
@@ -77,28 +79,49 @@ const loadDashboardData = async () => {
   if (loading) return <Loading />;
   if (error) return <Error message={error} onRetry={loadDashboardData} />;
 
+// Helper function to validate dates
+  const isValidDate = (date) => {
+    return date instanceof Date && !isNaN(date.getTime());
+  };
+
   // Calculate stats
-const activeCrops = data.crops.filter(crop => (crop.status_c || crop.status) !== "harvested").length;
-  const todayTasks = data.tasks.filter(task => 
-!(task.completed_c || task.completed) && isToday(new Date(task.due_date_c || task.dueDate))
-  ).length;
-  const upcomingTasks = data.tasks.filter(task => 
-!(task.completed_c || task.completed) && (isTomorrow(new Date(task.due_date_c || task.dueDate)) || isThisWeek(new Date(task.due_date_c || task.dueDate)))
-  ).slice(0, 5);
+  const activeCrops = data.crops.filter(crop => (crop.status_c || crop.status) !== "harvested").length;
+  const todayTasks = data.tasks.filter(task => {
+    const taskDate = new Date(task.due_date_c || task.dueDate);
+    return !(task.completed_c || task.completed) && isValidDate(taskDate) && isToday(taskDate);
+  }).length;
+  const upcomingTasks = data.tasks.filter(task => {
+    const taskDate = new Date(task.due_date_c || task.dueDate);
+    return !(task.completed_c || task.completed) && isValidDate(taskDate) && (isTomorrow(taskDate) || isThisWeek(taskDate));
+  }).slice(0, 5);
   
   const thisMonthIncome = data.transactions
-.filter(t => (t.type_c || t.type) === "income" && 
-      format(new Date(t.date_c || t.date), "yyyy-MM") === format(new Date(), "yyyy-MM"))
-.reduce((sum, t) => sum + (t.amount_c || t.amount), 0);
+    .filter(t => {
+      const transactionDate = new Date(t.date_c || t.date);
+      return (t.type_c || t.type) === "income" && 
+        isValidDate(transactionDate) && 
+        format(transactionDate, "yyyy-MM") === format(new Date(), "yyyy-MM");
+    })
+    .reduce((sum, t) => sum + (t.amount_c || t.amount), 0);
   
-  const thisMonthExpenses = data.transactions
-    .filter(t => (t.type_c || t.type) === "expense" && 
-      format(new Date(t.date_c || t.date), "yyyy-MM") === format(new Date(), "yyyy-MM"))
-.reduce((sum, t) => sum + (t.amount_c || t.amount), 0);
+const thisMonthExpenses = data.transactions
+    .filter(t => {
+      const transactionDate = new Date(t.date_c || t.date);
+      return (t.type_c || t.type) === "expense" && 
+        isValidDate(transactionDate) &&
+        format(transactionDate, "yyyy-MM") === format(new Date(), "yyyy-MM");
+    })
+    .reduce((sum, t) => sum + (t.amount_c || t.amount), 0);
 
-  const recentCrops = data.crops
+const recentCrops = data.crops
     .filter(crop => (crop.status_c || crop.status) !== "harvested")
-    .sort((a, b) => new Date(a.expectedHarvestDate) - new Date(b.expectedHarvestDate))
+    .sort((a, b) => {
+      const dateA = new Date(a.expectedHarvestDate || a.expected_harvest_date_c);
+      const dateB = new Date(b.expectedHarvestDate || b.expected_harvest_date_c);
+      if (!isValidDate(dateA)) return 1;
+      if (!isValidDate(dateB)) return -1;
+      return dateA - dateB;
+    })
     .slice(0, 3);
 
   return (
@@ -168,8 +191,12 @@ const activeCrops = data.crops.filter(crop => (crop.status_c || crop.status) !==
               </div>
             ) : (
               <div className="space-y-4">
-                {data.tasks
-                  .filter(task => !task.completed && isToday(new Date(task.dueDate)))
+{data.tasks
+                  .filter(task => {
+                    if (task.completed || task.completed_c) return false;
+                    const taskDate = new Date(task.dueDate || task.due_date_c);
+                    return isValidDate(taskDate) && isToday(taskDate);
+                  })
                   .slice(0, 3)
                   .map(task => (
                     <TaskCard
@@ -209,8 +236,8 @@ const activeCrops = data.crops.filter(crop => (crop.status_c || crop.status) !==
             />
           ) : (
             <div className="space-y-4">
-              {recentCrops.map(crop => {
-const farm = data.farms.find(f => f.Id === crop.farm_id_c);
+{recentCrops.map(crop => {
+                const farm = data.farms.find(f => f.Id === crop.farm_id_c);
                 return (
                   <CropCard key={crop.Id} crop={crop} farm={farm} />
                 );

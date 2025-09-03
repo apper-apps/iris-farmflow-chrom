@@ -1,21 +1,21 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { isToday, isTomorrow, isThisWeek, isPast } from "date-fns";
-import TaskCard from "@/components/molecules/TaskCard";
-import { useNotification } from "@/services/NotificationProvider";
-import AddTaskModal from "@/components/organisms/AddTaskModal";
-import Button from "@/components/atoms/Button";
-import Input from "@/components/atoms/Input";
-import Select from "@/components/atoms/Select";
-import Badge from "@/components/atoms/Badge";
-import Card from "@/components/atoms/Card";
-import Loading from "@/components/ui/Loading";
-import Error from "@/components/ui/Error";
-import Empty from "@/components/ui/Empty";
-import ApperIcon from "@/components/ApperIcon";
+import { isPast, isThisWeek, isToday, isTomorrow } from "date-fns";
 import { taskService } from "@/services/api/taskService";
 import { farmService } from "@/services/api/farmService";
 import { cropService } from "@/services/api/cropService";
+import { useNotification } from "@/services/NotificationProvider";
+import ApperIcon from "@/components/ApperIcon";
+import AddTaskModal from "@/components/organisms/AddTaskModal";
+import TaskCard from "@/components/molecules/TaskCard";
+import Error from "@/components/ui/Error";
+import Empty from "@/components/ui/Empty";
+import Loading from "@/components/ui/Loading";
+import Input from "@/components/atoms/Input";
+import Select from "@/components/atoms/Select";
+import Badge from "@/components/atoms/Badge";
+import Button from "@/components/atoms/Button";
+import Card from "@/components/atoms/Card";
 
 const Tasks = () => {
   const [tasks, setTasks] = useState([]);
@@ -85,8 +85,14 @@ const filteredTasks = tasks.filter(task => {
     ));
   };
 
-const categorizedTasks = () => {
-const filteredTasks = tasks.filter(task => {
+// Helper function to validate dates
+  const isValidTaskDate = (task) => {
+    const date = new Date(task.due_date_c || task.dueDate);
+    return date && !isNaN(date.getTime()) ? date : null;
+  };
+
+  const categorizedTasks = () => {
+    const filteredTasks = tasks.filter(task => {
       const matchesSearch = (task.title_c || task.title).toLowerCase().includes(searchTerm.toLowerCase()) ||
                            (task.description_c || task.description)?.toLowerCase().includes(searchTerm.toLowerCase());
       const matchesPriority = priorityFilter === "all" || (task.priority_c || task.priority) === priorityFilter;
@@ -98,10 +104,22 @@ const filteredTasks = tasks.filter(task => {
     });
     
     return {
-overdue: filteredTasks.filter(task => !(task.completed_c || task.completed) && isPast(new Date(task.due_date_c || task.dueDate)) && !isToday(new Date(task.due_date_c || task.dueDate))),
-      today: filteredTasks.filter(task => !(task.completed_c || task.completed) && isToday(new Date(task.due_date_c || task.dueDate))),
-      tomorrow: filteredTasks.filter(task => !(task.completed_c || task.completed) && isTomorrow(new Date(task.due_date_c || task.dueDate))),
-      thisWeek: filteredTasks.filter(task => !(task.completed_c || task.completed) && isThisWeek(new Date(task.due_date_c || task.dueDate)) && !isToday(new Date(task.due_date_c || task.dueDate)) && !isTomorrow(new Date(task.due_date_c || task.dueDate))),
+      overdue: filteredTasks.filter(task => {
+        const taskDate = isValidTaskDate(task);
+        return !(task.completed_c || task.completed) && taskDate && isPast(taskDate) && !isToday(taskDate);
+      }),
+      today: filteredTasks.filter(task => {
+        const taskDate = isValidTaskDate(task);
+        return !(task.completed_c || task.completed) && taskDate && isToday(taskDate);
+      }),
+      tomorrow: filteredTasks.filter(task => {
+        const taskDate = isValidTaskDate(task);
+        return !(task.completed_c || task.completed) && taskDate && isTomorrow(taskDate);
+      }),
+      thisWeek: filteredTasks.filter(task => {
+        const taskDate = isValidTaskDate(task);
+        return !(task.completed_c || task.completed) && taskDate && isThisWeek(taskDate) && !isToday(taskDate) && !isTomorrow(taskDate);
+      }),
       completed: filteredTasks.filter(task => (task.completed_c || task.completed))
     };
   };

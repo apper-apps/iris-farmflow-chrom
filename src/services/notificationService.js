@@ -10,7 +10,21 @@ class NotificationService {
       return;
     }
 
-    const dueDate = new Date(task.dueDate);
+// Helper function to validate dates
+    const isValidDate = (date) => {
+      return date instanceof Date && !isNaN(date.getTime());
+    };
+
+    // Helper function to safely parse dates
+    const safeParseDate = (dateValue) => {
+      if (!dateValue) return null;
+      const parsed = new Date(dateValue);
+      return isValidDate(parsed) ? parsed : null;
+    };
+
+    const dueDate = safeParseDate(task.dueDate || task.due_date_c);
+    if (!dueDate) return null; // Skip invalid dates
+    
     const now = new Date();
     const daysUntilDue = differenceInDays(dueDate, now);
     
@@ -20,11 +34,11 @@ class NotificationService {
       title = "Task Due Today! 📅";
       body = `${task.title} is due today`;
     } else if (isTomorrow(dueDate)) {
-      title = "Task Due Tomorrow! ⏰";
-      body = `${task.title} is due tomorrow (${format(dueDate, "MMM d")})`;
+title = "Task Due Tomorrow! ⏰";
+      body = `${task.title || task.title_c || 'Task'} is due tomorrow (${format(dueDate, "MMM d")})`;
     } else {
       title = `Task Due in ${daysUntilDue} Days`;
-      body = `${task.title} is due on ${format(dueDate, "MMM d, yyyy")}`;
+body = `${task.title || task.title_c || 'Task'} is due on ${format(dueDate, "MMM d, yyyy")}`;
     }
 
     // Add priority indicator

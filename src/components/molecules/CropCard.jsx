@@ -27,15 +27,15 @@ const CropCard = ({ crop, farm }) => {
   };
 
   const getDaysUntilHarvest = () => {
-    const today = new Date();
-    const harvestDate = new Date(crop.expectedHarvestDate);
+const today = new Date();
+    const harvestDate = new Date(crop.expected_harvest_date_c);
     return differenceInDays(harvestDate, today);
   };
 
   const daysLeft = getDaysUntilHarvest();
-  const progress = Math.max(0, Math.min(100, 
-    ((new Date() - new Date(crop.plantingDate)) / 
-    (new Date(crop.expectedHarvestDate) - new Date(crop.plantingDate))) * 100
+const progress = Math.max(0, Math.min(100, 
+    ((new Date() - new Date(crop.planting_date_c)) / 
+    (new Date(crop.expected_harvest_date_c) - new Date(crop.planting_date_c))) * 100
   ));
 
   return (
@@ -48,27 +48,27 @@ const CropCard = ({ crop, farm }) => {
       <Card>
         <div className="flex items-start justify-between mb-4">
           <div className="flex-1">
-            <h3 className="text-lg font-semibold text-gray-900 mb-1">{crop.type}</h3>
-            <p className="text-sm text-gray-600">{farm?.name}</p>
+<h3 className="text-lg font-semibold text-gray-900 mb-1">{crop.type_c}</h3>
+<p className="text-sm text-gray-600">{farm?.Name}</p>
           </div>
-          <Badge variant={getStatusColor(crop.status)} size="md">
-            <ApperIcon name={getStatusIcon(crop.status)} size={14} className="mr-1" />
-            {crop.status.charAt(0).toUpperCase() + crop.status.slice(1)}
+<Badge variant={getStatusColor(crop.status_c)} size="md">
+            <ApperIcon name={getStatusIcon(crop.status_c)} size={14} />
+            {crop.status_c.charAt(0).toUpperCase() + crop.status_c.slice(1)}
           </Badge>
         </div>
 
         <div className="space-y-3 mb-4">
           <div className="flex items-center justify-between text-sm">
             <span className="text-gray-600">Planted:</span>
-            <span className="font-medium">{format(new Date(crop.plantingDate), "MMM d, yyyy")}</span>
+<span className="font-medium">{format(new Date(crop.planting_date_c), "MMM d, yyyy")}</span>
           </div>
           <div className="flex items-center justify-between text-sm">
             <span className="text-gray-600">Expected Harvest:</span>
-            <span className="font-medium">{format(new Date(crop.expectedHarvestDate), "MMM d, yyyy")}</span>
+<span className="font-medium">{format(new Date(crop.expected_harvest_date_c), "MMM d, yyyy")}</span>
           </div>
           <div className="flex items-center justify-between text-sm">
             <span className="text-gray-600">Area:</span>
-            <span className="font-medium">{crop.area} acres</span>
+<span className="font-medium">{crop.area_c} acres</span>
           </div>
         </div>
 
@@ -94,8 +94,8 @@ const CropCard = ({ crop, farm }) => {
                `${daysLeft} days left`}
             </span>
           </div>
-          {crop.notes && (
-            <ApperIcon name="FileText" size={14} className="text-gray-400" title={crop.notes} />
+{crop.notes_c && (
+            <ApperIcon name="FileText" size={14} className="text-gray-400" title={crop.notes_c} />
           )}
         </div>
       </Card>

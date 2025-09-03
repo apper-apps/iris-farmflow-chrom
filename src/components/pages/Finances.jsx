@@ -64,22 +64,22 @@ const Finances = () => {
   };
 
   const filteredTransactions = transactions.filter(transaction => {
-    const farm = farms.find(f => f.Id === transaction.farmId);
-    const crop = crops.find(c => c.Id === transaction.cropId);
+const farm = farms.find(f => f.Id === transaction.farm_id_c);
+    const crop = crops.find(c => c.Id === transaction.crop_id_c);
     
-    const matchesSearch = transaction.description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         transaction.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         farm?.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         crop?.type.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesType = typeFilter === "all" || transaction.type === typeFilter;
-    const matchesFarm = farmFilter === "all" || transaction.farmId === parseInt(farmFilter);
+    const matchesSearch = (transaction.description_c || transaction.description)?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         (transaction.category_c || transaction.category).toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         farm?.Name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         (crop?.type_c || crop?.type)?.toLowerCase().includes(searchTerm.toLowerCase());
+const matchesType = typeFilter === "all" || (transaction.type_c || transaction.type) === typeFilter;
+    const matchesFarm = farmFilter === "all" || transaction.farm_id_c === parseInt(farmFilter);
     
     return matchesSearch && matchesType && matchesFarm;
   });
 
   const getFinancialStats = () => {
-    const thisMonth = transactions.filter(t => {
-      const transactionDate = new Date(t.date);
+const thisMonth = transactions.filter(t => {
+      const transactionDate = new Date(t.date_c || t.date);
       return transactionDate >= startOfMonth(new Date()) && transactionDate <= endOfMonth(new Date());
     });
 
@@ -90,8 +90,8 @@ const Finances = () => {
       return transactionDate >= lastMonthStart && transactionDate <= lastMonthEnd;
     });
 
-    const thisMonthIncome = thisMonth.filter(t => t.type === "income").reduce((sum, t) => sum + t.amount, 0);
-    const thisMonthExpenses = thisMonth.filter(t => t.type === "expense").reduce((sum, t) => sum + t.amount, 0);
+const thisMonthIncome = thisMonth.filter(t => (t.type_c || t.type) === "income").reduce((sum, t) => sum + (t.amount_c || t.amount), 0);
+    const thisMonthExpenses = thisMonth.filter(t => (t.type_c || t.type) === "expense").reduce((sum, t) => sum + (t.amount_c || t.amount), 0);
     const lastMonthIncome = lastMonth.filter(t => t.type === "income").reduce((sum, t) => sum + t.amount, 0);
     const lastMonthExpenses = lastMonth.filter(t => t.type === "expense").reduce((sum, t) => sum + t.amount, 0);
 
@@ -200,8 +200,8 @@ const Finances = () => {
         >
           <option value="all">All Farms</option>
           {farms.map(farm => (
-            <option key={farm.Id} value={farm.Id}>
-              {farm.name}
+<option key={farm.Id} value={farm.Id}>
+              {farm.Name}
             </option>
           ))}
         </Select>
@@ -215,9 +215,10 @@ const Finances = () => {
             <h3 className="text-lg font-semibold text-gray-900 mb-4">Income by Category</h3>
             {(() => {
               const incomeByCategory = transactions
-                .filter(t => t.type === "income")
+.filter(t => (t.type_c || t.type) === "income")
                 .reduce((acc, t) => {
-                  acc[t.category] = (acc[t.category] || 0) + t.amount;
+                  const category = t.category_c || t.category;
+                  acc[category] = (acc[category] || 0) + (t.amount_c || t.amount);
                   return acc;
                 }, {});
 
@@ -246,10 +247,11 @@ const Finances = () => {
           <Card>
             <h3 className="text-lg font-semibold text-gray-900 mb-4">Expenses by Category</h3>
             {(() => {
-              const expensesByCategory = transactions
-                .filter(t => t.type === "expense")
+const expensesByCategory = transactions
+                .filter(t => (t.type_c || t.type) === "expense")
                 .reduce((acc, t) => {
-                  acc[t.category] = (acc[t.category] || 0) + t.amount;
+                  const category = t.category_c || t.category;
+                  acc[category] = (acc[category] || 0) + (t.amount_c || t.amount);
                   return acc;
                 }, {});
 
@@ -312,8 +314,8 @@ const Finances = () => {
             {filteredTransactions
               .sort((a, b) => new Date(b.date) - new Date(a.date))
               .map((transaction, index) => {
-                const farm = farms.find(f => f.Id === transaction.farmId);
-                const crop = crops.find(c => c.Id === transaction.cropId);
+const farm = farms.find(f => f.Id === transaction.farm_id_c);
+                const crop = crops.find(c => c.Id === transaction.crop_id_c);
                 return (
                   <motion.div
                     key={transaction.Id}

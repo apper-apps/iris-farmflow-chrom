@@ -11,13 +11,13 @@ import { cropService } from "@/services/api/cropService";
 import { toast } from "react-toastify";
 
 const AddTaskModal = ({ isOpen, onClose, onTaskAdded }) => {
-  const [formData, setFormData] = useState({
-    farmId: "",
-    cropId: "",
-    title: "",
-    description: "",
-    dueDate: "",
-    priority: "medium"
+const [formData, setFormData] = useState({
+    farm_id_c: "",
+    crop_id_c: "",
+    title_c: "",
+    description_c: "",
+    due_date_c: "",
+    priority_c: "medium"
   });
   const [farms, setFarms] = useState([]);
   const [crops, setCrops] = useState([]);
@@ -32,10 +32,10 @@ const AddTaskModal = ({ isOpen, onClose, onTaskAdded }) => {
   }, [isOpen]);
 
   useEffect(() => {
-    if (formData.farmId) {
-      const farmCrops = crops.filter(crop => crop.farmId === parseInt(formData.farmId));
+if (formData.farm_id_c) {
+      const farmCrops = crops.filter(crop => crop.farm_id_c === parseInt(formData.farm_id_c));
       setFilteredCrops(farmCrops);
-      setFormData(prev => ({ ...prev, cropId: "" }));
+      setFormData(prev => ({ ...prev, crop_id_c: "" }));
     } else {
       setFilteredCrops([]);
     }
@@ -60,33 +60,33 @@ const AddTaskModal = ({ isOpen, onClose, onTaskAdded }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    if (!formData.farmId || !formData.title.trim() || !formData.dueDate) {
+if (!formData.farm_id_c || !formData.title_c.trim() || !formData.due_date_c) {
       toast.error("Please fill in all required fields");
       return;
     }
 
     setIsSubmitting(true);
     try {
-      const newTask = await taskService.create({
-        farmId: parseInt(formData.farmId),
-        cropId: formData.cropId ? parseInt(formData.cropId) : null,
-        title: formData.title.trim(),
-        description: formData.description.trim(),
-        dueDate: formData.dueDate,
-        priority: formData.priority,
-        completed: false,
-        createdAt: new Date().toISOString()
+const newTask = await taskService.create({
+        farm_id_c: parseInt(formData.farm_id_c),
+        crop_id_c: formData.crop_id_c ? parseInt(formData.crop_id_c) : null,
+        title_c: formData.title_c.trim(),
+        description_c: formData.description_c.trim(),
+        due_date_c: formData.due_date_c,
+        priority_c: formData.priority_c,
+        completed_c: false,
+        created_at_c: new Date().toISOString()
       });
       
       onTaskAdded(newTask);
       toast.success("Task added successfully!");
-      setFormData({
-        farmId: "",
-        cropId: "",
-        title: "",
-        description: "",
-        dueDate: "",
-        priority: "medium"
+setFormData({
+        farm_id_c: "",
+        crop_id_c: "",
+        title_c: "",
+        description_c: "",
+        due_date_c: "",
+        priority_c: "medium"
       });
       onClose();
     } catch (error) {
@@ -143,9 +143,9 @@ const AddTaskModal = ({ isOpen, onClose, onTaskAdded }) => {
                 required
               >
                 <option value="">Select a farm</option>
-                {farms.map(farm => (
+{farms.map(farm => (
                   <option key={farm.Id} value={farm.Id}>
-                    {farm.name}
+                    {farm.Name}
                   </option>
                 ))}
               </Select>
@@ -158,9 +158,9 @@ const AddTaskModal = ({ isOpen, onClose, onTaskAdded }) => {
                 disabled={!formData.farmId}
               >
                 <option value="">Select a crop (optional)</option>
-                {filteredCrops.map(crop => (
+{filteredCrops.map(crop => (
                   <option key={crop.Id} value={crop.Id}>
-                    {crop.type} ({crop.area} acres)
+                    {crop.type_c} ({crop.area_c} acres)
                   </option>
                 ))}
               </Select>

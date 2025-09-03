@@ -78,26 +78,26 @@ const loadDashboardData = async () => {
   if (error) return <Error message={error} onRetry={loadDashboardData} />;
 
   // Calculate stats
-  const activeCrops = data.crops.filter(crop => crop.status !== "harvested").length;
+const activeCrops = data.crops.filter(crop => (crop.status_c || crop.status) !== "harvested").length;
   const todayTasks = data.tasks.filter(task => 
-    !task.completed && isToday(new Date(task.dueDate))
+!(task.completed_c || task.completed) && isToday(new Date(task.due_date_c || task.dueDate))
   ).length;
   const upcomingTasks = data.tasks.filter(task => 
-    !task.completed && (isTomorrow(new Date(task.dueDate)) || isThisWeek(new Date(task.dueDate)))
+!(task.completed_c || task.completed) && (isTomorrow(new Date(task.due_date_c || task.dueDate)) || isThisWeek(new Date(task.due_date_c || task.dueDate)))
   ).slice(0, 5);
   
   const thisMonthIncome = data.transactions
-    .filter(t => t.type === "income" && 
-      format(new Date(t.date), "yyyy-MM") === format(new Date(), "yyyy-MM"))
-    .reduce((sum, t) => sum + t.amount, 0);
+.filter(t => (t.type_c || t.type) === "income" && 
+      format(new Date(t.date_c || t.date), "yyyy-MM") === format(new Date(), "yyyy-MM"))
+.reduce((sum, t) => sum + (t.amount_c || t.amount), 0);
   
   const thisMonthExpenses = data.transactions
-    .filter(t => t.type === "expense" && 
-      format(new Date(t.date), "yyyy-MM") === format(new Date(), "yyyy-MM"))
-    .reduce((sum, t) => sum + t.amount, 0);
+    .filter(t => (t.type_c || t.type) === "expense" && 
+      format(new Date(t.date_c || t.date), "yyyy-MM") === format(new Date(), "yyyy-MM"))
+.reduce((sum, t) => sum + (t.amount_c || t.amount), 0);
 
   const recentCrops = data.crops
-    .filter(crop => crop.status !== "harvested")
+    .filter(crop => (crop.status_c || crop.status) !== "harvested")
     .sort((a, b) => new Date(a.expectedHarvestDate) - new Date(b.expectedHarvestDate))
     .slice(0, 3);
 
@@ -210,7 +210,7 @@ const loadDashboardData = async () => {
           ) : (
             <div className="space-y-4">
               {recentCrops.map(crop => {
-                const farm = data.farms.find(f => f.Id === crop.farmId);
+const farm = data.farms.find(f => f.Id === crop.farm_id_c);
                 return (
                   <CropCard key={crop.Id} crop={crop} farm={farm} />
                 );

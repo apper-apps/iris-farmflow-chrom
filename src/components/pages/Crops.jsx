@@ -51,17 +51,18 @@ const Crops = () => {
   };
 
   const filteredCrops = crops.filter(crop => {
-    const matchesSearch = crop.type.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         crop.notes?.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesStatus = statusFilter === "all" || crop.status === statusFilter;
+const matchesSearch = (crop.type_c || crop.type).toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         (crop.notes_c || crop.notes)?.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesStatus = statusFilter === "all" || (crop.status_c || crop.status) === statusFilter;
     const matchesFarm = farmFilter === "all" || crop.farmId === parseInt(farmFilter);
     
     return matchesSearch && matchesStatus && matchesFarm;
   });
 
   const getStatusCounts = () => {
-    return crops.reduce((acc, crop) => {
-      acc[crop.status] = (acc[crop.status] || 0) + 1;
+return crops.reduce((acc, crop) => {
+      const status = crop.status_c || crop.status;
+      acc[status] = (acc[status] || 0) + 1;
       return acc;
     }, {});
   };
@@ -137,8 +138,8 @@ const Crops = () => {
         >
           <option value="all">All Farms</option>
           {farms.map(farm => (
-            <option key={farm.Id} value={farm.Id}>
-              {farm.name}
+<option key={farm.Id} value={farm.Id}>
+              {farm.Name}
             </option>
           ))}
         </Select>
@@ -168,7 +169,7 @@ const Crops = () => {
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
         >
           {filteredCrops.map((crop, index) => {
-            const farm = farms.find(f => f.Id === crop.farmId);
+const farm = farms.find(f => f.Id === crop.farm_id_c);
             return (
               <motion.div
                 key={crop.Id}
@@ -193,7 +194,7 @@ const Crops = () => {
               </div>
               <div>
                 <p className="text-2xl font-bold text-gray-900">
-                  {crops.reduce((total, crop) => total + crop.area, 0).toFixed(1)}
+{crops.reduce((total, crop) => total + (crop.area_c || crop.area), 0).toFixed(1)}
                 </p>
                 <p className="text-sm text-gray-600">Total Area (acres)</p>
               </div>
@@ -207,7 +208,7 @@ const Crops = () => {
               </div>
               <div>
                 <p className="text-2xl font-bold text-gray-900">
-                  {crops.filter(crop => crop.status === "ready").length}
+{crops.filter(crop => (crop.status_c || crop.status) === "ready").length}
                 </p>
                 <p className="text-sm text-gray-600">Ready for Harvest</p>
               </div>
@@ -221,7 +222,7 @@ const Crops = () => {
               </div>
               <div>
                 <p className="text-2xl font-bold text-gray-900">
-                  {crops.filter(crop => crop.status === "growing").length}
+{crops.filter(crop => (crop.status_c || crop.status) === "growing").length}
                 </p>
                 <p className="text-sm text-gray-600">Currently Growing</p>
               </div>

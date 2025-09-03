@@ -14,11 +14,11 @@ const FarmCard = ({ farm, cropCount = 0, activeTaskCount = 0, onClick }) => {
     >
       <Card className="cursor-pointer hover:shadow-lg" onClick={() => onClick(farm)}>
         <div className="flex items-start justify-between mb-4">
-          <div className="flex-1">
-            <h3 className="text-lg font-semibold text-gray-900 mb-1">{farm.name}</h3>
+<div className="flex-1">
+            <h3 className="text-lg font-semibold text-gray-900 mb-1">{farm.Name}</h3>
             <p className="text-sm text-gray-600 flex items-center gap-1">
-              <ApperIcon name="MapPin" size={14} />
-              {farm.location}
+<ApperIcon name="MapPin" size={14} />
+              {farm.location_c}
             </p>
           </div>
           <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-primary/10 to-primary/5 flex items-center justify-center">
@@ -27,9 +27,9 @@ const FarmCard = ({ farm, cropCount = 0, activeTaskCount = 0, onClick }) => {
         </div>
 
         <div className="grid grid-cols-2 gap-4 mb-4">
-          <div className="text-center p-3 bg-gradient-to-br from-surface to-white rounded-lg">
-            <p className="text-2xl font-bold text-gray-900">{farm.size}</p>
-            <p className="text-sm text-gray-600">{farm.unit}</p>
+<div className="text-center p-3 bg-gradient-to-br from-surface to-white rounded-lg">
+            <p className="text-2xl font-bold text-gray-900">{farm.size_c}</p>
+            <p className="text-sm text-gray-600">{farm.unit_c}</p>
           </div>
           <div className="text-center p-3 bg-gradient-to-br from-surface to-white rounded-lg">
             <p className="text-2xl font-bold text-primary">{cropCount}</p>
@@ -43,8 +43,8 @@ const FarmCard = ({ farm, cropCount = 0, activeTaskCount = 0, onClick }) => {
             <span>{activeTaskCount} pending tasks</span>
           </div>
           <div className="flex items-center gap-1">
-            <ApperIcon name="Calendar" size={14} />
-            <span>Est. {format(new Date(farm.createdAt), "MMM yyyy")}</span>
+<ApperIcon name="Calendar" size={14} />
+            <span>Est. {format(new Date(farm.created_at_c || farm.createdAt), "MMM yyyy")}</span>
           </div>
         </div>
       </Card>

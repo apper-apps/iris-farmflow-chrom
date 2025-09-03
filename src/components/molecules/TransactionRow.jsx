@@ -5,8 +5,8 @@ import Badge from "@/components/atoms/Badge";
 import ApperIcon from "@/components/ApperIcon";
 
 const TransactionRow = ({ transaction, crop, farm }) => {
-  const isIncome = transaction.type === "income";
-  const amount = parseFloat(transaction.amount);
+const isIncome = (transaction.type_c || transaction.type) === "income";
+  const amount = parseFloat(transaction.amount_c || transaction.amount);
 
   const getCategoryIcon = (category) => {
     const iconMap = {
@@ -34,18 +34,18 @@ const TransactionRow = ({ transaction, crop, farm }) => {
           isIncome ? "bg-green-100 text-green-600" : "bg-red-100 text-red-600"
         }`}>
           <ApperIcon 
-            name={isIncome ? "TrendingUp" : getCategoryIcon(transaction.category)} 
-            size={18} 
+name={isIncome ? "TrendingUp" : getCategoryIcon(transaction.category_c || transaction.category)} 
+            size={18}
           />
         </div>
         <div>
-          <p className="font-medium text-gray-900">{transaction.description || transaction.category}</p>
+<p className="font-medium text-gray-900">{transaction.description_c || transaction.description || transaction.category_c || transaction.category}</p>
           <div className="flex items-center gap-2 text-sm text-gray-500">
-            <span>{farm?.name}</span>
+<span>{farm?.Name}</span>
             {crop && (
               <>
                 <span>•</span>
-                <span>{crop.type}</span>
+                <span>{crop.type_c}</span>
               </>
             )}
             <span>•</span>
@@ -61,7 +61,7 @@ const TransactionRow = ({ transaction, crop, farm }) => {
           {isIncome ? "+" : "-"}${amount.toFixed(2)}
         </p>
         <Badge variant={isIncome ? "success" : "error"} size="sm">
-          {transaction.category}
+{transaction.category_c || transaction.category}
         </Badge>
       </div>
     </motion.div>

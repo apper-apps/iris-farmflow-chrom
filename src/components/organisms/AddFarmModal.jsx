@@ -8,35 +8,35 @@ import { farmService } from "@/services/api/farmService";
 import { toast } from "react-toastify";
 
 const AddFarmModal = ({ isOpen, onClose, onFarmAdded }) => {
-  const [formData, setFormData] = useState({
-    name: "",
-    size: "",
-    unit: "acres",
-    location: ""
+const [formData, setFormData] = useState({
+    Name: "",
+    size_c: "",
+    unit_c: "acres",
+    location_c: ""
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    if (!formData.name.trim() || !formData.size || !formData.location.trim()) {
+if (!formData.Name.trim() || !formData.size_c || !formData.location_c.trim()) {
       toast.error("Please fill in all required fields");
       return;
     }
 
     setIsSubmitting(true);
     try {
-      const newFarm = await farmService.create({
-        name: formData.name.trim(),
-        size: parseFloat(formData.size),
-        unit: formData.unit,
-        location: formData.location.trim(),
-        createdAt: new Date().toISOString()
+const newFarm = await farmService.create({
+        Name: formData.Name.trim(),
+        size_c: parseFloat(formData.size_c),
+        unit_c: formData.unit_c,
+        location_c: formData.location_c.trim(),
+        created_at_c: new Date().toISOString()
       });
       
       onFarmAdded(newFarm);
       toast.success("Farm added successfully!");
-      setFormData({ name: "", size: "", unit: "acres", location: "" });
+setFormData({ Name: "", size_c: "", unit_c: "acres", location_c: "" });
       onClose();
     } catch (error) {
       toast.error("Failed to add farm");

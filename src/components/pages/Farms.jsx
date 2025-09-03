@@ -56,14 +56,14 @@ const Farms = () => {
   };
 
   const filteredFarms = farms.filter(farm =>
-    farm.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    farm.location.toLowerCase().includes(searchTerm.toLowerCase())
+farm.Name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    farm.location_c.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const getFarmStats = (farmId) => {
-    const farmCrops = crops.filter(crop => crop.farmId === farmId);
-    const activeCrops = farmCrops.filter(crop => crop.status !== "harvested").length;
-    const activeTasks = tasks.filter(task => task.farmId === farmId && !task.completed).length;
+const farmCrops = crops.filter(crop => crop.farm_id_c === farmId);
+    const activeCrops = farmCrops.filter(crop => (crop.status_c || crop.status) !== "harvested").length;
+    const activeTasks = tasks.filter(task => task.farm_id_c === farmId && !(task.completed_c || task.completed)).length;
     
     return { cropCount: activeCrops, activeTaskCount: activeTasks };
   };
@@ -168,7 +168,7 @@ const Farms = () => {
               </div>
               <div>
                 <p className="text-2xl font-bold text-gray-900">
-                  {farms.reduce((total, farm) => total + farm.size, 0).toFixed(1)}
+{farms.reduce((total, farm) => total + farm.size_c, 0).toFixed(1)}
                 </p>
                 <p className="text-sm text-gray-600">Total Acres</p>
               </div>
@@ -182,7 +182,7 @@ const Farms = () => {
               </div>
               <div>
                 <p className="text-2xl font-bold text-gray-900">
-                  {crops.filter(crop => crop.status !== "harvested").length}
+{crops.filter(crop => (crop.status_c || crop.status) !== "harvested").length}
                 </p>
                 <p className="text-sm text-gray-600">Active Crops</p>
               </div>

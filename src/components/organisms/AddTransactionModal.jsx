@@ -11,14 +11,14 @@ import { cropService } from "@/services/api/cropService";
 import { toast } from "react-toastify";
 
 const AddTransactionModal = ({ isOpen, onClose, onTransactionAdded, initialType = "expense" }) => {
-  const [formData, setFormData] = useState({
-    farmId: "",
-    cropId: "",
-    type: initialType,
-    category: "",
-    amount: "",
-    date: new Date().toISOString().split('T')[0],
-    description: ""
+const [formData, setFormData] = useState({
+    farm_id_c: "",
+    crop_id_c: "",
+    type_c: initialType,
+    category_c: "",
+    amount_c: "",
+    date_c: new Date().toISOString().split('T')[0],
+    description_c: ""
   });
   const [farms, setFarms] = useState([]);
   const [crops, setCrops] = useState([]);
@@ -42,10 +42,10 @@ const AddTransactionModal = ({ isOpen, onClose, onTransactionAdded, initialType 
   }, [isOpen, initialType]);
 
   useEffect(() => {
-    if (formData.farmId) {
-      const farmCrops = crops.filter(crop => crop.farmId === parseInt(formData.farmId));
+if (formData.farm_id_c) {
+      const farmCrops = crops.filter(crop => crop.farm_id_c === parseInt(formData.farm_id_c));
       setFilteredCrops(farmCrops);
-      setFormData(prev => ({ ...prev, cropId: "" }));
+      setFormData(prev => ({ ...prev, crop_id_c: "" }));
     } else {
       setFilteredCrops([]);
     }
@@ -70,38 +70,38 @@ const AddTransactionModal = ({ isOpen, onClose, onTransactionAdded, initialType 
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    if (!formData.farmId || !formData.category || !formData.amount || !formData.date) {
+if (!formData.farm_id_c || !formData.category_c || !formData.amount_c || !formData.date_c) {
       toast.error("Please fill in all required fields");
       return;
     }
 
-    if (parseFloat(formData.amount) <= 0) {
+    if (parseFloat(formData.amount_c) <= 0) {
       toast.error("Amount must be greater than 0");
       return;
     }
 
     setIsSubmitting(true);
     try {
-      const newTransaction = await transactionService.create({
-        farmId: parseInt(formData.farmId),
-        cropId: formData.cropId ? parseInt(formData.cropId) : null,
-        type: formData.type,
-        category: formData.category,
-        amount: parseFloat(formData.amount),
-        date: formData.date,
-        description: formData.description.trim()
+const newTransaction = await transactionService.create({
+        farm_id_c: parseInt(formData.farm_id_c),
+        crop_id_c: formData.crop_id_c ? parseInt(formData.crop_id_c) : null,
+        type_c: formData.type_c,
+        category_c: formData.category_c,
+        amount_c: parseFloat(formData.amount_c),
+        date_c: formData.date_c,
+        description_c: formData.description_c.trim()
       });
       
       onTransactionAdded(newTransaction);
-      toast.success(`${formData.type === 'income' ? 'Income' : 'Expense'} recorded successfully!`);
-      setFormData({
-        farmId: "",
-        cropId: "",
-        type: initialType,
-        category: "",
-        amount: "",
-        date: new Date().toISOString().split('T')[0],
-        description: ""
+toast.success(`${formData.type_c === 'income' ? 'Income' : 'Expense'} recorded successfully!`);
+setFormData({
+        farm_id_c: "",
+        crop_id_c: "",
+        type_c: initialType,
+        category_c: "",
+        amount_c: "",
+        date_c: new Date().toISOString().split('T')[0],
+        description_c: ""
       });
       onClose();
     } catch (error) {
@@ -116,7 +116,7 @@ const AddTransactionModal = ({ isOpen, onClose, onTransactionAdded, initialType 
     setFormData(prev => ({
       ...prev,
       [name]: value,
-      ...(name === 'type' && { category: "" }) // Reset category when type changes
+...(name === 'type_c' && { category_c: "" }) // Reset category when type changes
     }));
   };
 
@@ -174,10 +174,10 @@ const AddTransactionModal = ({ isOpen, onClose, onTransactionAdded, initialType 
                 disabled={isLoading}
                 required
               >
-                <option value="">Select a farm</option>
+<option value="">Select a farm</option>
                 {farms.map(farm => (
                   <option key={farm.Id} value={farm.Id}>
-                    {farm.name}
+                    {farm.Name}
                   </option>
                 ))}
               </Select>
@@ -189,10 +189,10 @@ const AddTransactionModal = ({ isOpen, onClose, onTransactionAdded, initialType 
                 onChange={handleChange}
                 disabled={!formData.farmId}
               >
-                <option value="">Select a crop (optional)</option>
+<option value="">Select a crop (optional)</option>
                 {filteredCrops.map(crop => (
                   <option key={crop.Id} value={crop.Id}>
-                    {crop.type} ({crop.area} acres)
+                    {crop.type_c} ({crop.area_c} acres)
                   </option>
                 ))}
               </Select>

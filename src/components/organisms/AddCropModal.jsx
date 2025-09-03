@@ -10,14 +10,14 @@ import { farmService } from "@/services/api/farmService";
 import { toast } from "react-toastify";
 
 const AddCropModal = ({ isOpen, onClose, onCropAdded }) => {
-  const [formData, setFormData] = useState({
-    farmId: "",
-    type: "",
-    plantingDate: "",
-    expectedHarvestDate: "",
-    status: "planted",
-    area: "",
-    notes: ""
+const [formData, setFormData] = useState({
+    farm_id_c: "",
+    type_c: "",
+    planting_date_c: "",
+    expected_harvest_date_c: "",
+    status_c: "planted",
+    area_c: "",
+    notes_c: ""
   });
   const [farms, setFarms] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -44,38 +44,38 @@ const AddCropModal = ({ isOpen, onClose, onCropAdded }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    if (!formData.farmId || !formData.type.trim() || !formData.plantingDate || !formData.expectedHarvestDate || !formData.area) {
+if (!formData.farm_id_c || !formData.type_c.trim() || !formData.planting_date_c || !formData.expected_harvest_date_c || !formData.area_c) {
       toast.error("Please fill in all required fields");
       return;
     }
 
-    if (new Date(formData.expectedHarvestDate) <= new Date(formData.plantingDate)) {
+    if (new Date(formData.expected_harvest_date_c) <= new Date(formData.planting_date_c)) {
       toast.error("Expected harvest date must be after planting date");
       return;
     }
 
     setIsSubmitting(true);
     try {
-      const newCrop = await cropService.create({
-        farmId: parseInt(formData.farmId),
-        type: formData.type.trim(),
-        plantingDate: formData.plantingDate,
-        expectedHarvestDate: formData.expectedHarvestDate,
-        status: formData.status,
-        area: parseFloat(formData.area),
-        notes: formData.notes.trim()
+const newCrop = await cropService.create({
+        farm_id_c: parseInt(formData.farm_id_c),
+        type_c: formData.type_c.trim(),
+        planting_date_c: formData.planting_date_c,
+        expected_harvest_date_c: formData.expected_harvest_date_c,
+        status_c: formData.status_c,
+        area_c: parseFloat(formData.area_c),
+        notes_c: formData.notes_c.trim()
       });
       
       onCropAdded(newCrop);
       toast.success("Crop added successfully!");
-      setFormData({
-        farmId: "",
-        type: "",
-        plantingDate: "",
-        expectedHarvestDate: "",
-        status: "planted",
-        area: "",
-        notes: ""
+setFormData({
+        farm_id_c: "",
+        type_c: "",
+        planting_date_c: "",
+        expected_harvest_date_c: "",
+        status_c: "planted",
+        area_c: "",
+        notes_c: ""
       });
       onClose();
     } catch (error) {
@@ -114,10 +114,10 @@ const AddCropModal = ({ isOpen, onClose, onCropAdded }) => {
             </div>
 
             <form onSubmit={handleSubmit} className="p-6 space-y-4">
-              <Select
+<Select
                 label="Farm"
-                name="farmId"
-                value={formData.farmId}
+                name="farm_id_c"
+                value={formData.farm_id_c}
                 onChange={handleChange}
                 disabled={isLoading}
                 required
@@ -125,7 +125,7 @@ const AddCropModal = ({ isOpen, onClose, onCropAdded }) => {
                 <option value="">Select a farm</option>
                 {farms.map(farm => (
                   <option key={farm.Id} value={farm.Id}>
-                    {farm.name} ({farm.size} {farm.unit})
+                    {farm.Name} ({farm.size_c} {farm.unit_c})
                   </option>
                 ))}
               </Select>

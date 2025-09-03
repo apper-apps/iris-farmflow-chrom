@@ -31,9 +31,10 @@ const TaskCard = ({ task, onUpdate }) => {
   const handleToggleComplete = async () => {
     setIsCompleting(true);
     try {
-      const updatedTask = await taskService.update(task.Id, {
+const updatedTask = await taskService.update(task.Id, {
         ...task,
-        completed: !task.completed
+        completed_c: !task.completed_c,
+        completed: !task.completed_c
       });
       onUpdate(updatedTask);
       toast.success(task.completed ? "Task marked as incomplete" : "Task completed!");
@@ -44,7 +45,7 @@ const TaskCard = ({ task, onUpdate }) => {
     }
   };
 
-  const isOverdue = new Date(task.dueDate) < new Date() && !task.completed;
+const isOverdue = new Date(task.due_date_c || task.dueDate) < new Date() && !(task.completed_c || task.completed);
 
   return (
     <motion.div
@@ -61,34 +62,34 @@ const TaskCard = ({ task, onUpdate }) => {
                 onClick={handleToggleComplete}
                 disabled={isCompleting}
                 className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-colors ${
-                  task.completed 
+(task.completed_c || task.completed) 
                     ? "bg-primary border-primary text-white" 
                     : "border-gray-300 hover:border-primary"
                 }`}
               >
-                {task.completed && <ApperIcon name="Check" size={12} />}
+{(task.completed_c || task.completed) && <ApperIcon name="Check" size={12} />}
               </button>
-              <h3 className={`font-semibold text-gray-900 ${task.completed ? "line-through" : ""}`}>
-                {task.title}
+<h3 className={`font-semibold text-gray-900 ${(task.completed_c || task.completed) ? "line-through" : ""}`}>
+                {task.title_c || task.title}
               </h3>
             </div>
             
-            {task.description && (
-              <p className="text-sm text-gray-600 mb-3">{task.description}</p>
+{(task.description_c || task.description) && (
+              <p className="text-sm text-gray-600 mb-3">{task.description_c || task.description}</p>
             )}
             
             <div className="flex items-center gap-4 text-sm text-gray-500">
               <div className="flex items-center gap-1">
                 <ApperIcon name="Calendar" size={14} />
-                <span className={isOverdue ? "text-red-600 font-medium" : ""}>
-                  {format(new Date(task.dueDate), "MMM d, yyyy")}
+<span className={isOverdue ? "text-red-600 font-medium" : ""}>
+                  {format(new Date(task.due_date_c || task.dueDate), "MMM d, yyyy")}
                 </span>
               </div>
             </div>
           </div>
           
           <div className="flex flex-col items-end gap-2">
-            <Badge variant={getPriorityColor(task.priority)} size="sm">
+<Badge variant={getPriorityColor(task.priority_c || task.priority)} size="sm">
               <ApperIcon name={getPriorityIcon(task.priority)} size={12} className="mr-1" />
               {task.priority}
             </Badge>

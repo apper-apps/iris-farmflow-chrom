@@ -37,10 +37,10 @@ const Tasks = () => {
   useEffect(() => {
     if (tasks.length > 0) {
       try {
-        const filteredTasks = tasks.filter(task => {
-          const matchesSearch = task.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                               task.description?.toLowerCase().includes(searchTerm.toLowerCase());
-          const matchesPriority = priorityFilter === "all" || task.priority === priorityFilter;
+const filteredTasks = tasks.filter(task => {
+          const matchesSearch = (task.title_c || task.title).toLowerCase().includes(searchTerm.toLowerCase()) ||
+                               (task.description_c || task.description)?.toLowerCase().includes(searchTerm.toLowerCase());
+          const matchesPriority = priorityFilter === "all" || (task.priority_c || task.priority) === priorityFilter;
           const matchesStatus = statusFilter === "all" || 
                                (statusFilter === "completed" && task.completed) ||
                                (statusFilter === "pending" && !task.completed);
@@ -86,23 +86,23 @@ const Tasks = () => {
   };
 
 const categorizedTasks = () => {
-    const filteredTasks = tasks.filter(task => {
-      const matchesSearch = task.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                           task.description?.toLowerCase().includes(searchTerm.toLowerCase());
-      const matchesPriority = priorityFilter === "all" || task.priority === priorityFilter;
+const filteredTasks = tasks.filter(task => {
+      const matchesSearch = (task.title_c || task.title).toLowerCase().includes(searchTerm.toLowerCase()) ||
+                           (task.description_c || task.description)?.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesPriority = priorityFilter === "all" || (task.priority_c || task.priority) === priorityFilter;
       const matchesStatus = statusFilter === "all" || 
-                           (statusFilter === "completed" && task.completed) ||
-                           (statusFilter === "pending" && !task.completed);
+                           (statusFilter === "completed" && (task.completed_c || task.completed)) ||
+                           (statusFilter === "pending" && !(task.completed_c || task.completed));
       
       return matchesSearch && matchesPriority && matchesStatus;
     });
     
     return {
-      overdue: filteredTasks.filter(task => !task.completed && isPast(new Date(task.dueDate)) && !isToday(new Date(task.dueDate))),
-      today: filteredTasks.filter(task => !task.completed && isToday(new Date(task.dueDate))),
-      tomorrow: filteredTasks.filter(task => !task.completed && isTomorrow(new Date(task.dueDate))),
-      thisWeek: filteredTasks.filter(task => !task.completed && isThisWeek(new Date(task.dueDate)) && !isToday(new Date(task.dueDate)) && !isTomorrow(new Date(task.dueDate))),
-      completed: filteredTasks.filter(task => task.completed)
+overdue: filteredTasks.filter(task => !(task.completed_c || task.completed) && isPast(new Date(task.due_date_c || task.dueDate)) && !isToday(new Date(task.due_date_c || task.dueDate))),
+      today: filteredTasks.filter(task => !(task.completed_c || task.completed) && isToday(new Date(task.due_date_c || task.dueDate))),
+      tomorrow: filteredTasks.filter(task => !(task.completed_c || task.completed) && isTomorrow(new Date(task.due_date_c || task.dueDate))),
+      thisWeek: filteredTasks.filter(task => !(task.completed_c || task.completed) && isThisWeek(new Date(task.due_date_c || task.dueDate)) && !isToday(new Date(task.due_date_c || task.dueDate)) && !isTomorrow(new Date(task.due_date_c || task.dueDate))),
+      completed: filteredTasks.filter(task => (task.completed_c || task.completed))
     };
   };
 

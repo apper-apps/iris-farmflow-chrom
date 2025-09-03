@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
 import { farmService } from "@/services/api/farmService";
 import { cropService } from "@/services/api/cropService";
 import { taskService } from "@/services/api/taskService";

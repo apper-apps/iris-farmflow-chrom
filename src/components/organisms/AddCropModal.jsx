@@ -131,9 +131,9 @@ setFormData({
               </Select>
 
               <Input
-                label="Crop Type"
-                name="type"
-                value={formData.type}
+label="Crop Type"
+                name="type_c"
+                value={formData.type_c}
                 onChange={handleChange}
                 placeholder="e.g., Corn, Wheat, Tomatoes"
                 required
@@ -141,18 +141,18 @@ setFormData({
 
               <div className="grid grid-cols-2 gap-4">
                 <Input
-                  label="Planting Date"
-                  name="plantingDate"
+label="Planting Date"
+                  name="planting_date_c"
                   type="date"
-                  value={formData.plantingDate}
+                  value={formData.planting_date_c}
                   onChange={handleChange}
                   required
                 />
-                <Input
+<Input
                   label="Expected Harvest Date"
-                  name="expectedHarvestDate"
+                  name="expected_harvest_date_c"
                   type="date"
-                  value={formData.expectedHarvestDate}
+                  value={formData.expected_harvest_date_c}
                   onChange={handleChange}
                   required
                 />
@@ -160,20 +160,20 @@ setFormData({
 
               <div className="grid grid-cols-2 gap-4">
                 <Input
-                  label="Area (acres)"
-                  name="area"
+label="Area (acres)"
+                  name="area_c"
                   type="number"
-                  value={formData.area}
+                  value={formData.area_c}
                   onChange={handleChange}
                   placeholder="Enter area"
                   min="0"
                   step="0.1"
                   required
                 />
-                <Select
+<Select
                   label="Status"
-                  name="status"
-                  value={formData.status}
+                  name="status_c"
+                  value={formData.status_c}
                   onChange={handleChange}
                 >
                   <option value="planted">Planted</option>
@@ -184,9 +184,9 @@ setFormData({
               </div>
 
               <Textarea
-                label="Notes (optional)"
-                name="notes"
-                value={formData.notes}
+label="Notes (optional)"
+                name="notes_c"
+                value={formData.notes_c}
                 onChange={handleChange}
                 placeholder="Any additional notes about this crop..."
                 rows={3}

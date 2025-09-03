@@ -17,7 +17,10 @@ import { taskService } from "@/services/api/taskService";
 import { transactionService } from "@/services/api/transactionService";
 import { weatherService } from "@/services/api/weatherService";
 import { useNotification } from "@/services/NotificationProvider";
+
 const Dashboard = () => {
+  const { checkTaskNotifications } = useNotification();
+  
   const [data, setData] = useState({
     farms: [],
     crops: [],
@@ -32,7 +35,7 @@ const Dashboard = () => {
     loadDashboardData();
   }, []);
 
-  const loadDashboardData = async () => {
+const loadDashboardData = async () => {
     try {
       setLoading(true);
       setError(null);
@@ -45,11 +48,15 @@ const Dashboard = () => {
         weatherService.getCurrentWeather()
       ]);
 
-setData({ farms, crops, tasks, transactions, weather });
+      setData({ farms, crops, tasks, transactions, weather });
       
       // Check for task notifications after loading data
-      const { checkTaskNotifications } = useNotification();
-      checkTaskNotifications(tasks);
+      try {
+        checkTaskNotifications(tasks);
+      } catch (notificationError) {
+        console.error('Failed to check task notifications:', notificationError);
+        // Don't fail the entire dashboard load if notifications fail
+      }
       
     } catch (err) {
       setError("Failed to load dashboard data");
